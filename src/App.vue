@@ -82,7 +82,7 @@ async function submitDemoForm() {
 
     submitState.value = "success";
     submitFeedbackType.value = "success";
-    submitFeedback.value = "Thanks, request was sent successfully.";
+    submitFeedback.value = "Thanks, your request was sent successfully.";
     demoForm.fullName = "";
     demoForm.companyName = "";
     demoForm.email = "";
@@ -305,7 +305,7 @@ watch(isDemoModalOpen, (open) => {
               <span v-else class="demo-submit-btn__tick" aria-hidden="true"></span>
             </button>
             <button type="button" class="btn btn--ghost demo-cancel-btn" @click="closeDemoModal">
-              Cancel
+              Close
             </button>
           </div>
           <p v-if="submitFeedback" :class="submitFeedbackType === 'success' ? 'demo-form__success' : 'demo-form__error'">
