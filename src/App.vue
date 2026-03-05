@@ -212,15 +212,6 @@ watch(isDemoModalOpen, (open) => {
           <div class="workflow-slider__fill" :style="{ width: `${workflowSliderPercent}%` }"></div>
           <span class="workflow-slider__thumb" :style="{ left: `${workflowSliderPercent}%` }"></span>
         </div>
-        <!-- <div class="workflow-slider__stops">
-          <span
-            v-for="(step, index) in workflow"
-            :key="`workflow-stop-${step.title}`"
-            :class="{ 'is-active': index === activeWorkflowStep }"
-          >
-            {{ step.title }}
-          </span>
-        </div> -->
       </div>
 
       <div class="workflow-track">
@@ -256,7 +247,7 @@ watch(isDemoModalOpen, (open) => {
           <h2>Scale faster with an intelligent compliance operating system.</h2>
         </div>
         <button type="button" class="btn btn--primary" @click="openDemoModal">
-          Talk to CompSync
+          Connect with CompSync
         </button>
       </div>
     </section>
