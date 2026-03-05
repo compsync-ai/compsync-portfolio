@@ -1,4 +1,6 @@
 <script setup>
+const emit = defineEmits(["open-demo"]);
+
 defineProps({
   links: {
     type: Array,
@@ -20,7 +22,9 @@ defineProps({
       </nav>
 
       <div class="site-header__actions">
-        <a class="btn btn--ghost" href="#contact">Book Demo</a>
+        <button type="button" class="btn btn--ghost" @click="emit('open-demo')">
+          Book Demo
+        </button>
       </div>
     </div>
   </header>
