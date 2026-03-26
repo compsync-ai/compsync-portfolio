@@ -51,12 +51,12 @@ function isRuleOpen(ruleId) {
   <div class="documentation-page">
     <header class="docs-header">
       <div class="docs-container docs-header__inner">
-        <a href="/" class="docs-brand" aria-label="Back to CompSync home">
+        <a href="https://compsync.us" class="docs-brand" aria-label="Back to CompSync home">
           <img :src="brandLogo" alt="CompSync logo" class="docs-brand__logo" />
         </a>
 
         <nav class="docs-topnav" aria-label="Documentation navigation">
-          <a href="/" class="docs-back-button">Back to Site</a>
+          <a href="https://compsync.us" class="docs-back-button">Back to Site</a>
         </nav>
       </div>
     </header>
