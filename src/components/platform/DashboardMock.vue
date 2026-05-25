@@ -142,16 +142,22 @@ onMounted(() => {
           <div class="chart chart--distribution">
             <header>
               <h4>Alert Distribution</h4>
-              <p>By status · all queues</p>
+              <p>By status · last 90 days</p>
             </header>
             <div class="donut">
+              <!--
+                Circumference at r=44 is 2*pi*44 = 276.46.
+                Each segment length is (count / 1247) * 276.46 rounded to 2dp.
+                Open 247 = 54.78  ·  In Review 154 = 34.15  ·  Escalated 162 = 35.93  ·  Closed 684 = 151.60
+                Rotation = -90 + (cumulative_count / 1247) * 360, so each segment starts where the previous ended.
+              -->
               <svg viewBox="0 0 120 120">
                 <circle cx="60" cy="60" r="44" fill="none" stroke="var(--bg-elevated)" stroke-width="14" />
                 <circle
                   cx="60" cy="60" r="44" fill="none"
                   stroke="var(--brand)" stroke-width="14"
                   stroke-dasharray="276.46"
-                  :stroke-dashoffset="276.46 - 156 * donutOffset"
+                  :stroke-dashoffset="276.46 - 54.78 * donutOffset"
                   transform="rotate(-90 60 60)"
                   stroke-linecap="butt"
                 />
@@ -159,34 +165,34 @@ onMounted(() => {
                   cx="60" cy="60" r="44" fill="none"
                   stroke="#f59e0b" stroke-width="14"
                   stroke-dasharray="276.46"
-                  :stroke-dashoffset="276.46 - 48 * donutOffset"
-                  transform="rotate(67 60 60)"
+                  :stroke-dashoffset="276.46 - 34.15 * donutOffset"
+                  transform="rotate(-18.69 60 60)"
                   stroke-linecap="butt"
                 />
                 <circle
                   cx="60" cy="60" r="44" fill="none"
                   stroke="#dc2626" stroke-width="14"
                   stroke-dasharray="276.46"
-                  :stroke-dashoffset="276.46 - 24 * donutOffset"
-                  transform="rotate(130 60 60)"
+                  :stroke-dashoffset="276.46 - 35.93 * donutOffset"
+                  transform="rotate(25.78 60 60)"
                   stroke-linecap="butt"
                 />
                 <circle
                   cx="60" cy="60" r="44" fill="none"
                   stroke="var(--text-tertiary)" stroke-width="14"
                   stroke-dasharray="276.46"
-                  :stroke-dashoffset="276.46 - 48 * donutOffset"
-                  transform="rotate(160 60 60)"
+                  :stroke-dashoffset="276.46 - 151.60 * donutOffset"
+                  transform="rotate(72.55 60 60)"
                   stroke-linecap="butt"
                 />
-                <text x="60" y="58" text-anchor="middle" class="donut__num">20</text>
+                <text x="60" y="58" text-anchor="middle" class="donut__num">1,247</text>
                 <text x="60" y="72" text-anchor="middle" class="donut__label">Total</text>
               </svg>
               <ul class="donut__legend">
-                <li><span class="dot dot--brand"></span>Open</li>
-                <li><span class="dot dot--warn"></span>In Review</li>
-                <li><span class="dot dot--danger"></span>Escalated</li>
-                <li><span class="dot dot--mute"></span>Closed</li>
+                <li><span class="dot dot--brand"></span>Open <em>247</em></li>
+                <li><span class="dot dot--warn"></span>In Review <em>154</em></li>
+                <li><span class="dot dot--danger"></span>Escalated <em>162</em></li>
+                <li><span class="dot dot--mute"></span>Closed <em>684</em></li>
               </ul>
             </div>
           </div>
@@ -531,6 +537,13 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 6px;
+}
+.donut__legend em {
+  margin-left: auto;
+  font-style: normal;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
 }
 .dot {
   width: 7px;
