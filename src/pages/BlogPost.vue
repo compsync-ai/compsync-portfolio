@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { marked } from "marked";
 import PreviewHeader from "../components/preview/PreviewHeader.vue";
@@ -11,6 +11,49 @@ const showDemo = ref(false);
 const route = useRoute();
 const router = useRouter();
 const modules = import.meta.glob("../content/blog/*.md", { eager: true, query: "?raw", import: "default" });
+
+// Persist and restore scroll position across page refreshes for blog posts,
+// so a reader who refreshes mid-article lands back where they were.
+// In-app navigation (back / forward / link click) is handled separately by
+// Vue Router's scrollBehavior — this only kicks in on a reload of the same URL.
+function scrollKey() {
+  return `blog-scroll:${route.fullPath}`;
+}
+
+let scrollSaveTimer = null;
+function onScrollSave() {
+  clearTimeout(scrollSaveTimer);
+  scrollSaveTimer = setTimeout(() => {
+    try {
+      sessionStorage.setItem(scrollKey(), String(window.scrollY));
+    } catch {
+      // ignore quota / privacy errors
+    }
+  }, 150);
+}
+
+onMounted(() => {
+  // Only restore on a refresh (reload) — not on regular client-side nav.
+  try {
+    const nav = performance.getEntriesByType("navigation")[0];
+    if (nav && nav.type === "reload") {
+      const saved = sessionStorage.getItem(scrollKey());
+      if (saved !== null) {
+        const y = parseInt(saved, 10);
+        // Wait a frame so the post body has laid out before we jump.
+        requestAnimationFrame(() => window.scrollTo(0, y));
+      }
+    }
+  } catch {
+    // ignore
+  }
+  window.addEventListener("scroll", onScrollSave, { passive: true });
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("scroll", onScrollSave);
+  clearTimeout(scrollSaveTimer);
+});
 
 function parseFrontmatter(raw) {
   const match = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
