@@ -23,6 +23,7 @@ const showDemo = ref(false);
 const heroRef = ref(null);
 const headlineRef = ref(null);
 const productRef = ref(null);
+const bentoRef = ref(null);
 
 const animatedKpis = ref([
   { label: "Average case triage", target: 45, suffix: "s", value: 0 },
@@ -30,8 +31,54 @@ const animatedKpis = ref([
   { label: "Rule packs deployed", target: 30, suffix: "+", value: 0 }
 ]);
 
+// Typewriter state for the four bento card metrics.
+// Each entry tracks the text typed so far + whether the cursor should blink.
+const metricsTyped = ref(platformPillars.map(() => ""));
+const metricsTyping = ref(platformPillars.map(() => false));
+let typewriterStarted = false;
+let typewriterObserver = null;
+let typewriterTimeouts = [];
+let isAlive = true;
+
 let reveals = [];
 let kpiTl = null;
+
+function startTypewriter() {
+  if (typewriterStarted) return;
+  typewriterStarted = true;
+
+  const charDelay = 50;       // ms per character
+  const interCellDelay = 320; // pause between cells after one finishes
+  let cumulativeMs = 500;     // initial delay after the cells fade in
+
+  platformPillars.forEach((pillar, idx) => {
+    const text = pillar.metric;
+    const startT = setTimeout(() => {
+      if (!isAlive) return;
+      metricsTyping.value[idx] = true;
+      let char = 0;
+      const typeNext = () => {
+        if (!isAlive) return;
+        char += 1;
+        metricsTyped.value[idx] = text.slice(0, char);
+        if (char < text.length) {
+          const t = setTimeout(typeNext, charDelay);
+          typewriterTimeouts.push(t);
+        } else {
+          // Done typing this cell — leave the cursor for a beat then hide.
+          const t = setTimeout(() => {
+            if (!isAlive) return;
+            metricsTyping.value[idx] = false;
+          }, 260);
+          typewriterTimeouts.push(t);
+        }
+      };
+      typeNext();
+    }, cumulativeMs);
+    typewriterTimeouts.push(startT);
+    cumulativeMs += text.length * charDelay + interCellDelay;
+  });
+}
 
 function startKpiCount() {
   if (kpiTl) return;
@@ -81,11 +128,31 @@ onMounted(() => {
     observer.observe(el);
     return observer;
   });
+
+  // Trigger the bento metric typewriter once the cell grid is in view.
+  if (bentoRef.value) {
+    typewriterObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            startTypewriter();
+            typewriterObserver.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.35 }
+    );
+    typewriterObserver.observe(bentoRef.value);
+  }
 });
 
 onBeforeUnmount(() => {
+  isAlive = false;
   reveals.forEach((o) => o.disconnect());
   kpiTl?.kill();
+  typewriterObserver?.disconnect();
+  typewriterTimeouts.forEach((t) => clearTimeout(t));
+  typewriterTimeouts = [];
 });
 </script>
 
@@ -167,7 +234,7 @@ onBeforeUnmount(() => {
             </p>
           </div>
 
-          <div class="lp-bento">
+          <div class="lp-bento" ref="bentoRef">
             <article v-for="(pillar, i) in platformPillars" :key="pillar.title" class="lp-bento__cell lp-reveal" :class="`lp-bento__cell--${i}`">
               <div class="lp-bento__tag">
                 <span class="lp-bento__dot"></span>
@@ -175,7 +242,13 @@ onBeforeUnmount(() => {
               </div>
               <h3>{{ pillar.title }}</h3>
               <p>{{ pillar.body }}</p>
-              <p class="lp-bento__metric">{{ pillar.metric }}</p>
+              <p class="lp-bento__metric" :aria-label="pillar.metric">
+                <span aria-hidden="true">{{ metricsTyped[i] }}</span><span
+                  v-if="metricsTyping[i]"
+                  class="lp-bento__cursor"
+                  aria-hidden="true"
+                ></span>
+              </p>
             </article>
           </div>
         </div>
@@ -687,8 +760,22 @@ onBeforeUnmount(() => {
   color: var(--brand) !important;
   padding-top: 0.8rem;
   border-top: 1px dashed var(--border-default);
+  min-height: calc(0.8rem + 1.5em); /* reserve height so cell layout doesn't jump while typing */
+  white-space: nowrap;
 }
 .theme-dark .lp-bento__metric { color: #2dd4bf !important; border-top-color: rgba(45, 212, 191, 0.25); }
+.lp-bento__cursor {
+  display: inline-block;
+  width: 0.55ch;
+  height: 1em;
+  vertical-align: -2px;
+  margin-left: 2px;
+  background: currentColor;
+  animation: lpCursorBlink 0.85s steps(1) infinite;
+}
+@keyframes lpCursorBlink {
+  50% { opacity: 0; }
+}
 
 /* ============== INVESTIGATION ============== */
 .lp-invest__inner {
