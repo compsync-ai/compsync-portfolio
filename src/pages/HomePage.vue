@@ -117,9 +117,8 @@ watch(isDemoModalOpen, (open) => {
     <div class="preview-banner">
       <p>
         <strong>New design preview:</strong>
-        <router-link to="/preview/dark">View dark concept</router-link>
-        ·
-        <router-link to="/preview/light">View light concept</router-link>
+        <router-link to="/preview/v1">View the new design (V1)</router-link>
+        <span class="preview-banner__hint">— with a light/dark toggle in the header</span>
       </p>
     </div>
 
@@ -288,5 +287,9 @@ watch(isDemoModalOpen, (open) => {
 }
 .preview-banner a:hover {
   color: #0b6b5f;
+}
+.preview-banner__hint {
+  color: #4a5d5a;
+  font-size: 0.82rem;
 }
 </style>

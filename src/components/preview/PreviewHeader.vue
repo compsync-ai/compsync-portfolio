@@ -1,11 +1,10 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from "vue";
+import { useTheme } from "../../composables/useTheme";
 
-const props = defineProps({
-  variant: { type: String, default: "light" }
-});
 defineEmits(["open-demo"]);
 
+const { theme, toggleTheme } = useTheme();
 const isScrolled = ref(false);
 
 function onScroll() {
@@ -41,10 +40,28 @@ onBeforeUnmount(() => {
       </nav>
 
       <div class="preview-header__actions">
-        <router-link :to="variant === 'dark' ? '/preview/light' : '/preview/dark'" class="preview-header__theme-swap">
-          <span v-if="variant === 'dark'">View light</span>
-          <span v-else>View dark</span>
-        </router-link>
+        <button
+          type="button"
+          class="theme-toggle"
+          :aria-label="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+          :title="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+          @click="toggleTheme"
+        >
+          <span class="theme-toggle__track">
+            <span class="theme-toggle__thumb" :class="{ 'theme-toggle__thumb--dark': theme === 'dark' }">
+              <!-- Sun icon -->
+              <svg v-if="theme === 'dark'" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke-linecap="round" />
+              </svg>
+              <!-- Moon icon -->
+              <svg v-else width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+          </span>
+        </button>
+
         <button type="button" class="btn-primary" @click="$emit('open-demo')">
           Book a demo
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -124,20 +141,51 @@ onBeforeUnmount(() => {
 .preview-header__actions {
   display: inline-flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.85rem;
 }
-.preview-header__theme-swap {
-  font-size: 0.85rem;
-  color: var(--text-tertiary);
-  padding: 0.4rem 0.7rem;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--border-subtle);
-  transition: color 180ms ease, border-color 180ms ease;
+
+/* Theme toggle */
+.theme-toggle {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  width: 52px;
+  height: 28px;
+  border-radius: 99px;
+  position: relative;
 }
-.preview-header__theme-swap:hover {
-  color: var(--brand);
+.theme-toggle__track {
+  position: absolute;
+  inset: 0;
+  border-radius: 99px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  transition: background 240ms ease, border-color 240ms ease;
+}
+.theme-toggle:hover .theme-toggle__track {
   border-color: var(--brand);
 }
+.theme-toggle__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 99px;
+  background: var(--bg-surface);
+  color: var(--brand);
+  display: grid;
+  place-items: center;
+  transition: transform 320ms var(--ease-spring), background 240ms ease, color 240ms ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+}
+.theme-toggle__thumb--dark {
+  transform: translateX(24px);
+  background: var(--brand);
+  color: white;
+}
+
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -167,7 +215,6 @@ onBeforeUnmount(() => {
 
 @media (max-width: 880px) {
   .preview-header__nav { display: none; }
-  .preview-header__theme-swap { display: none; }
   .preview-header__inner { grid-template-columns: auto 1fr; }
 }
 </style>

@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 import * as THREE from "three";
 
 const props = defineProps({
@@ -259,6 +259,21 @@ function onPointerLeave() {
   mouseTarget.y = 0;
 }
 
+function refreshParticleColors() {
+  if (!points) return;
+  const colors = palette();
+  const colorAttr = points.geometry.getAttribute("particleColor");
+  const arr = colorAttr.array;
+  for (let i = 0; i < props.particleCount; i++) {
+    const t = (i * 0.6180339887) % 1; // deterministic mix per particle
+    const c = colors.particle.clone().lerp(colors.particleSoft, t);
+    arr[i * 3] = c.r;
+    arr[i * 3 + 1] = c.g;
+    arr[i * 3 + 2] = c.b;
+  }
+  colorAttr.needsUpdate = true;
+}
+
 onMounted(() => {
   setup();
   rafId = requestAnimationFrame(tick);
@@ -268,6 +283,10 @@ onMounted(() => {
     parent.addEventListener("pointermove", onPointerMove);
     parent.addEventListener("pointerleave", onPointerLeave);
   }
+});
+
+watch(() => props.variant, () => {
+  refreshParticleColors();
 });
 
 onBeforeUnmount(() => {
