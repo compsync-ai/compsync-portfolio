@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import brandLogo from "../../assets/logo-compsync.svg";
 
 const props = defineProps({
@@ -9,6 +9,10 @@ const props = defineProps({
 const linePath = ref("");
 const lineFillPath = ref("");
 const donutOffset = ref(0);
+// DOM refs for the volume chart so we can drive the SVG draw-in animation.
+const lineStrokeEl = ref(null);
+const lineFillEl = ref(null);
+const lineDotsEl = ref(null);
 
 // Coordinates for the alert-volume line (sharp straight segments between points)
 const points = [
@@ -21,15 +25,140 @@ function sharpLine(pts) {
   return pts.map((p, i) => `${i === 0 ? "M" : "L"} ${p[0]} ${p[1]}`).join(" ");
 }
 
-onMounted(() => {
+// Cubic ease-out — same feel as GSAP's power3.out, no library dependency.
+const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
+const rafIds = [];
+let unmounted = false;
+
+function tween({ duration, delay = 0, onUpdate, onComplete }) {
+  const start = performance.now() + delay;
+  const tick = (now) => {
+    if (unmounted) return;
+    const elapsed = now - start;
+    if (elapsed < 0) {
+      rafIds.push(requestAnimationFrame(tick));
+      return;
+    }
+    const progress = Math.min(elapsed / duration, 1);
+    onUpdate(easeOutCubic(progress));
+    if (progress < 1) {
+      rafIds.push(requestAnimationFrame(tick));
+    } else if (onComplete) {
+      onComplete();
+    }
+  };
+  rafIds.push(requestAnimationFrame(tick));
+}
+
+let chartsObserver = null;
+let lineLength = 0;
+let animationStarted = false;
+
+function startChartAnimations() {
+  if (animationStarted) return;
+  animationStarted = true;
+
+  // Slightly stagger the start of donut vs line so the eye has time to
+  // register both as separate gestures.
+  const startDelay = 120;
+
+  // Donut sweep — donutOffset 0 -> 1 drives every arc's stroke-dashoffset.
+  tween({
+    duration: 2500,
+    delay: startDelay,
+    onUpdate: (t) => { donutOffset.value = t; }
+  });
+
+  // Line draws in left-to-right by collapsing stroke-dashoffset to 0.
+  const stroke = lineStrokeEl.value;
+  if (stroke && lineLength) {
+    tween({
+      duration: 3000,
+      delay: startDelay,
+      onUpdate: (t) => { stroke.style.strokeDashoffset = String(lineLength * (1 - t)); }
+    });
+  }
+
+  // Area fill fades in alongside.
+  const fill = lineFillEl.value;
+  if (fill) {
+    tween({
+      duration: 2400,
+      delay: startDelay + 250,
+      onUpdate: (t) => { fill.style.opacity = String(t); }
+    });
+  }
+
+  // Dots stagger in across the line trace duration so they land on the
+  // curve roughly as the trace passes over each x position.
+  const dotsGroup = lineDotsEl.value;
+  if (dotsGroup) {
+    const dots = Array.from(dotsGroup.querySelectorAll("circle"));
+    const spread = 2400;
+    dots.forEach((dot, i) => {
+      const dotDelay = startDelay + 350 + (i * spread) / Math.max(dots.length - 1, 1);
+      tween({
+        duration: 400,
+        delay: dotDelay,
+        onUpdate: (t) => { dot.style.opacity = String(t); }
+      });
+    });
+  }
+}
+
+onMounted(async () => {
   linePath.value = sharpLine(points);
   const closed = `${linePath.value} L ${points[points.length - 1][0]} 100 L 0 100 Z`;
   lineFillPath.value = closed;
 
-  // Animate the donut stroke offset on mount
-  setTimeout(() => {
-    donutOffset.value = 1;
-  }, 200);
+  // Wait for Vue to flush the d-attribute onto the SVG paths so
+  // getTotalLength() returns the real measurement instead of 0.
+  await nextTick();
+
+  // Set every chart element to its "hidden" pre-animation state right away,
+  // so that when the user finally scrolls down to the dashboard they see
+  // a blank chart that then animates in — not a static finished chart.
+  const stroke = lineStrokeEl.value;
+  if (stroke) {
+    lineLength = stroke.getTotalLength();
+    stroke.style.strokeDasharray = String(lineLength);
+    stroke.style.strokeDashoffset = String(lineLength);
+  }
+  const fill = lineFillEl.value;
+  if (fill) fill.style.opacity = "0";
+  const dotsGroup = lineDotsEl.value;
+  if (dotsGroup) {
+    dotsGroup.querySelectorAll("circle").forEach((c) => { c.style.opacity = "0"; });
+  }
+  donutOffset.value = 0;
+
+  // Wait for the charts to actually scroll into view before kicking off
+  // the draw-in. If they're already visible at page load (tall screens,
+  // tiny viewports, etc.) IntersectionObserver fires immediately anyway.
+  const chartsEl = stroke?.closest(".dash__charts") || stroke?.closest(".dash");
+  if (!chartsEl) {
+    startChartAnimations();
+    return;
+  }
+  chartsObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          chartsObserver.unobserve(e.target);
+          startChartAnimations();
+        }
+      });
+    },
+    { threshold: 0.25 }
+  );
+  chartsObserver.observe(chartsEl);
+});
+
+onBeforeUnmount(() => {
+  unmounted = true;
+  rafIds.forEach((id) => cancelAnimationFrame(id));
+  chartsObserver?.disconnect();
 });
 </script>
 
@@ -127,9 +256,9 @@ onMounted(() => {
                     <stop offset="1" stop-color="var(--brand)" stop-opacity="0" />
                   </linearGradient>
                 </defs>
-                <path :d="lineFillPath" fill="url(#dashFill)" />
-                <path :d="linePath" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" />
-                <g class="chart__dots">
+                <path ref="lineFillEl" :d="lineFillPath" fill="url(#dashFill)" />
+                <path ref="lineStrokeEl" :d="linePath" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" />
+                <g ref="lineDotsEl" class="chart__dots">
                   <circle v-for="(pt, idx) in points" :key="idx" :cx="pt[0]" :cy="pt[1]" r="2.6" fill="var(--brand)" />
                 </g>
               </svg>
