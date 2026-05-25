@@ -7,6 +7,7 @@ import WorkflowDataflow from "../components/preview/WorkflowDataflow.vue";
 import ParticleNetwork from "../components/effects/ParticleNetwork.vue";
 import DashboardMock from "../components/platform/DashboardMock.vue";
 import AlertDrawerMock from "../components/platform/AlertDrawerMock.vue";
+import reportsImage from "../assets/images/platform/reports-page.png";
 import { gsap } from "gsap";
 import { useTheme } from "../composables/useTheme";
 import {
@@ -211,6 +212,38 @@ onBeforeUnmount(() => {
           </div>
           <div class="lp-invest__product lp-reveal">
             <AlertDrawerMock :variant="theme" />
+          </div>
+        </div>
+      </section>
+
+      <!-- REPORTING SHOWCASE -->
+      <section class="lp-section lp-reporting">
+        <div class="lp-container lp-reporting__inner">
+          <div class="lp-reporting__copy lp-reveal">
+            <p class="lp-eyebrow">Reporting &amp; Audit Trail</p>
+            <h2>Program health you can hand to your board.</h2>
+            <p class="lp-section-sub">
+              Examiner-ready by default. The compliance audit trail maps to FFIEC examiner findings: SAR conversion rate, alert aging distributions, false positive rates, FinCEN 314(a) response time, and staff training completion. Export any reporting window for an examiner walkthrough.
+            </p>
+            <ul class="lp-reporting__bullets">
+              <li><strong>Program health score.</strong> FFIEC examiner-readiness at a glance.</li>
+              <li><strong>Aging and funnel.</strong> See where alerts sit and how they convert to cases and SARs.</li>
+              <li><strong>BPI benchmarks.</strong> Compare your SAR rate against bank-wide ranges.</li>
+              <li><strong>Audit-ready exports.</strong> One click to a PDF you can hand an examiner.</li>
+            </ul>
+          </div>
+          <div class="lp-reporting__product lp-reveal">
+            <div class="lp-window">
+              <header class="lp-window__chrome">
+                <span class="lp-window__dot"></span>
+                <span class="lp-window__dot"></span>
+                <span class="lp-window__dot"></span>
+                <span class="lp-window__url">compsync.us/dashboard/reports</span>
+              </header>
+              <div class="lp-window__viewport">
+                <img :src="reportsImage" alt="CompSync Reports page showing Program Health score, FFIEC metrics, alert aging distribution, and SAR conversion funnel" loading="lazy" />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -694,6 +727,103 @@ onBeforeUnmount(() => {
 }
 .lp-invest__list strong { color: var(--text-primary); }
 
+/* ============== REPORTING ============== */
+.lp-reporting__inner {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 4rem;
+  align-items: center;
+}
+.lp-reporting__bullets {
+  margin: 1.6rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.7rem;
+  color: var(--text-secondary);
+  font-size: 0.96rem;
+  line-height: 1.55;
+}
+.lp-reporting__bullets li {
+  padding-left: 1.4rem;
+  position: relative;
+}
+.lp-reporting__bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55rem;
+  width: 7px;
+  height: 7px;
+  border-radius: 99px;
+  background: var(--brand);
+}
+.theme-dark .lp-reporting__bullets li::before { box-shadow: 0 0 12px var(--brand); }
+.lp-reporting__bullets strong { color: var(--text-primary); }
+
+.lp-window {
+  border-radius: 14px;
+  border: 1px solid var(--border-default);
+  background: var(--bg-surface);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.theme-dark .lp-window {
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(45, 212, 191, 0.12);
+}
+.lp-window__chrome {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 0.85rem;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.lp-window__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 99px;
+  background: var(--text-tertiary);
+  opacity: 0.35;
+}
+.lp-window__dot:nth-child(1) { background: #ef4444; opacity: 0.8; }
+.lp-window__dot:nth-child(2) { background: #f59e0b; opacity: 0.8; }
+.lp-window__dot:nth-child(3) { background: #10b981; opacity: 0.8; }
+.lp-window__url {
+  margin-left: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lp-window__viewport {
+  position: relative;
+  max-height: 520px;
+  overflow: hidden;
+  background: #ffffff;
+}
+.lp-window__viewport::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 120px;
+  background: linear-gradient(180deg, transparent 0%, var(--bg-surface) 100%);
+  pointer-events: none;
+}
+.lp-window__viewport img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 720ms var(--ease-out-quint);
+}
+.lp-window:hover .lp-window__viewport img {
+  transform: translateY(-50px);
+}
+
 /* ============== INDUSTRIES ============== */
 .lp-industries__grid {
   display: grid;
@@ -882,6 +1012,7 @@ onBeforeUnmount(() => {
   .lp-industries__grid { grid-template-columns: repeat(2, 1fr); }
   .lp-blog__grid { grid-template-columns: 1fr; }
   .lp-invest__inner { grid-template-columns: 1fr; }
+  .lp-reporting__inner { grid-template-columns: 1fr; }
   .lp-cta__inner { grid-template-columns: 1fr; }
 }
 @media (max-width: 720px) {

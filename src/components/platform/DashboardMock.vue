@@ -10,26 +10,19 @@ const linePath = ref("");
 const lineFillPath = ref("");
 const donutOffset = ref(0);
 
-// Coordinates for the alert-volume line (matches the platform's curve roughly)
+// Coordinates for the alert-volume line (sharp straight segments between points)
 const points = [
   [0, 60], [40, 50], [80, 56], [120, 30], [160, 70], [200, 38],
   [240, 50], [280, 18], [320, 32], [360, 26], [400, 28], [440, 60], [480, 62]
 ];
 
-function smoothLine(pts) {
+function sharpLine(pts) {
   if (pts.length < 2) return "";
-  let d = `M ${pts[0][0]} ${pts[0][1]}`;
-  for (let i = 1; i < pts.length; i++) {
-    const [x1, y1] = pts[i - 1];
-    const [x2, y2] = pts[i];
-    const cx = (x1 + x2) / 2;
-    d += ` Q ${cx} ${y1}, ${cx} ${(y1 + y2) / 2} T ${x2} ${y2}`;
-  }
-  return d;
+  return pts.map((p, i) => `${i === 0 ? "M" : "L"} ${p[0]} ${p[1]}`).join(" ");
 }
 
 onMounted(() => {
-  linePath.value = smoothLine(points);
+  linePath.value = sharpLine(points);
   const closed = `${linePath.value} L ${points[points.length - 1][0]} 100 L 0 100 Z`;
   lineFillPath.value = closed;
 
@@ -94,27 +87,27 @@ onMounted(() => {
         </div>
 
         <div class="dash__kpis">
+          <div class="kpi kpi--txn">
+            <p class="kpi__label">Transactions Today</p>
+            <p class="kpi__value">1.2M</p>
+            <p class="kpi__delta kpi__delta--up">↗ +4% vs yesterday</p>
+            <span class="kpi__icon">⇄</span>
+          </div>
           <div class="kpi kpi--alerts">
             <p class="kpi__label">Open Alerts</p>
-            <p class="kpi__value">14</p>
+            <p class="kpi__value">247</p>
             <p class="kpi__delta kpi__delta--up">↗ +12% vs last month</p>
             <span class="kpi__icon">⚠</span>
           </div>
           <div class="kpi kpi--cases">
             <p class="kpi__label">Active Cases</p>
-            <p class="kpi__value">2</p>
+            <p class="kpi__value">38</p>
             <p class="kpi__delta kpi__delta--down">↘ −5% vs last month</p>
             <span class="kpi__icon">📋</span>
           </div>
-          <div class="kpi kpi--rules">
-            <p class="kpi__label">Rules Deployed</p>
-            <p class="kpi__value">12</p>
-            <p class="kpi__delta kpi__delta--up">↗ +2 vs last month</p>
-            <span class="kpi__icon">⚖</span>
-          </div>
-          <div class="kpi kpi--flagged">
-            <p class="kpi__label">Flagged This Month</p>
-            <p class="kpi__value">$1.3M</p>
+          <div class="kpi kpi--volume">
+            <p class="kpi__label">Volume Reviewed</p>
+            <p class="kpi__value">$487M</p>
             <p class="kpi__delta kpi__delta--up">↗ +18% vs last month</p>
             <span class="kpi__icon">$</span>
           </div>
@@ -429,10 +422,10 @@ onMounted(() => {
   border-left: 3px solid var(--brand);
   overflow: hidden;
 }
+.kpi--txn    { border-left-color: var(--brand); }
 .kpi--alerts { border-left-color: #f59e0b; }
 .kpi--cases  { border-left-color: #2dd4bf; }
-.kpi--rules  { border-left-color: #8b5cf6; }
-.kpi--flagged { border-left-color: #ef4444; }
+.kpi--volume { border-left-color: #8b5cf6; }
 
 .kpi__label {
   margin: 0;
