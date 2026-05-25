@@ -30,7 +30,7 @@ function palette() {
       particleSoft: new THREE.Color("#0f8f7a"),
       line: new THREE.Color("#2dd4bf"),
       lineFar: new THREE.Color("#0f8f7a"),
-      lineAlpha: 0.55,
+      lineAlpha: 0.72,
       bg: new THREE.Color("#050b0a")
     };
   }
@@ -38,8 +38,8 @@ function palette() {
     particle: new THREE.Color("#0f8f7a"),
     particleSoft: new THREE.Color("#16a085"),
     line: new THREE.Color("#0f8f7a"),
-    lineFar: new THREE.Color("#9fe0d4"),
-    lineAlpha: 0.14,
+    lineFar: new THREE.Color("#3fb59c"),
+    lineAlpha: 0.32,
     bg: new THREE.Color("#fbfdfc")
   };
 }
@@ -69,11 +69,26 @@ function setup() {
     const x = (Math.random() - 0.5) * 10;
     const y = (Math.random() - 0.5) * 6;
     const z = (Math.random() - 0.5) * 4;
-    const vx = (Math.random() - 0.5) * 0.0035;
-    const vy = (Math.random() - 0.5) * 0.0035;
-    const vz = (Math.random() - 0.5) * 0.0015;
+    // Calm starting velocity — barely-noticeable initial drift.
+    const vx = (Math.random() - 0.5) * 0.00053;
+    const vy = (Math.random() - 0.5) * 0.00053;
+    const vz = (Math.random() - 0.5) * 0.00026;
+    // Independent phase offsets and speeds per axis so X and Y are
+    // not correlated. Plus a tiny constant directional bias so each
+    // particle has its own slow heading instead of all of them
+    // oscillating around the same neighborhood.
+    const px = Math.random() * Math.PI * 2;
+    const py = Math.random() * Math.PI * 2;
+    const speedX = 0.12 + Math.random() * 0.2;
+    const speedY = 0.12 + Math.random() * 0.2;
+    const driftX = (Math.random() - 0.5) * 0.0002;
+    const driftY = (Math.random() - 0.5) * 0.0002;
 
-    particles.push({ x, y, z, vx, vy, vz, idx: i });
+    particles.push({
+      x, y, z, vx, vy, vz,
+      px, py, speedX, speedY, driftX, driftY,
+      idx: i
+    });
 
     positions[i * 3] = x;
     positions[i * 3 + 1] = y;
@@ -161,7 +176,20 @@ function tick(time) {
 
   // Update particle positions
   const posAttr = points.geometry.getAttribute("position");
+  // Time in seconds — drives the flow field that keeps motion alive.
+  const t = time * 0.0001;
   for (const p of particles) {
+    // Flow field: independent sin/cos nudge per axis so X and Y motion
+    // are uncorrelated. Magnitudes are intentionally tiny — they only
+    // need to compensate for damping, not power the motion.
+    p.vx += Math.sin(t * p.speedX + p.px) * 0.0000105;
+    p.vy += Math.cos(t * p.speedY + p.py) * 0.0000105;
+    p.vz += Math.sin(t * 0.24 + p.px + p.py) * 0.0000048;
+    // Constant directional bias per particle so they actually travel
+    // somewhere over time instead of orbiting their start position.
+    p.vx += p.driftX * 0.0032;
+    p.vy += p.driftY * 0.0032;
+
     p.x += p.vx;
     p.y += p.vy;
     p.z += p.vz;
@@ -174,7 +202,7 @@ function tick(time) {
     if (p.z > 2.2) p.z = -2.2;
     if (p.z < -2.2) p.z = 2.2;
 
-    // Cursor repulsion
+    // Cursor repulsion (still works on top of the flow field).
     const dx = p.x - mouse.x * 4;
     const dy = p.y - mouse.y * 2.5;
     const distSq = dx * dx + dy * dy;
@@ -183,10 +211,12 @@ function tick(time) {
       p.vx += (dx / Math.sqrt(distSq + 0.0001)) * f;
       p.vy += (dy / Math.sqrt(distSq + 0.0001)) * f;
     }
-    // velocity damping
-    p.vx *= 0.985;
-    p.vy *= 0.985;
-    p.vz *= 0.985;
+
+    // Light damping. Strong enough to let mouse-induced spikes settle,
+    // weak enough that the flow-field nudges can sustain motion.
+    p.vx *= 0.996;
+    p.vy *= 0.996;
+    p.vz *= 0.996;
 
     posAttr.setXYZ(p.idx, p.x, p.y, p.z);
   }

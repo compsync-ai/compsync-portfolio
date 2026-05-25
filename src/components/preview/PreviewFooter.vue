@@ -33,9 +33,45 @@ defineProps({ variant: { type: String, default: "light" } });
         <div>
           <p class="preview-footer__label">Compliance</p>
           <ul>
-            <li>FFIEC examiner-ready</li>
-            <li>FinCEN SAR / CTR</li>
-            <li>FATF / AML-CFT</li>
+            <li>
+              <a
+                href="https://bsaaml.ffiec.gov/manual"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="preview-footer__ext"
+              >
+                FFIEC BSA/AML Manual
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+                  <path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.fincen.gov/resources/statutes-regulations"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="preview-footer__ext"
+              >
+                FinCEN Regulations
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+                  <path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Fatf-recommendations.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="preview-footer__ext"
+              >
+                FATF Recommendations
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+                  <path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -107,6 +143,19 @@ defineProps({ variant: { type: String, default: "light" } });
   transition: color 180ms ease;
 }
 .preview-footer a:hover { color: var(--brand); }
+.preview-footer__ext {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.preview-footer__ext svg {
+  opacity: 0.55;
+  transition: opacity 180ms ease, transform 180ms var(--ease-out-quint);
+}
+.preview-footer__ext:hover svg {
+  opacity: 1;
+  transform: translate(1px, -1px);
+}
 .preview-footer__base {
   max-width: 1280px;
   margin: 0 auto;

@@ -82,6 +82,44 @@ defineProps({ variant: { type: String, default: "light" } });
   font-family: var(--font-sans);
   font-size: 12.5px;
   color: var(--text-primary);
+  position: relative;
+  overflow: hidden;
+  transition: transform 320ms var(--ease-out-quint), border-color 320ms ease, box-shadow 320ms ease;
+}
+/* Hover sheen — same treatment as the bento cells. */
+.drawer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 110% 90% at 30% 110%, color-mix(in srgb, var(--brand) 16%, transparent) 0%, transparent 60%),
+    linear-gradient(135deg, color-mix(in srgb, var(--brand) 6%, transparent) 0%, transparent 55%);
+  opacity: 0;
+  transition: opacity 520ms var(--ease-out-quint);
+  pointer-events: none;
+  z-index: 0;
+}
+.drawer > * { position: relative; z-index: 1; }
+.drawer:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--brand) 40%, transparent);
+  box-shadow:
+    0 18px 42px color-mix(in srgb, var(--brand) 15%, transparent),
+    0 4px 12px color-mix(in srgb, var(--brand) 10%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--brand) 18%, transparent);
+}
+.drawer:hover::before { opacity: 1; }
+:global(.theme-dark) .drawer::before {
+  background:
+    radial-gradient(ellipse 110% 90% at 30% 110%, rgba(45, 212, 191, 0.18) 0%, transparent 60%),
+    linear-gradient(135deg, rgba(45, 212, 191, 0.09) 0%, transparent 55%);
+}
+:global(.theme-dark) .drawer:hover {
+  border-color: rgba(45, 212, 191, 0.35);
+  box-shadow:
+    0 22px 50px rgba(45, 212, 191, 0.22),
+    0 6px 16px rgba(45, 212, 191, 0.13),
+    0 0 0 1px rgba(45, 212, 191, 0.26);
 }
 
 .drawer__head-row {
