@@ -1,0 +1,147 @@
+/*
+  CompSync design tokens.
+  Brand color #0f8f7a is fixed across both themes.
+  Surrounding palette and typography differ between light & dark.
+*/
+
+:root {
+  /* Brand (constant across themes) */
+  --brand: #0f8f7a;
+  --brand-bright: #16a085;
+  --brand-deep: #0b6b5f;
+  --brand-soft: #def3ee;
+  --brand-glow: rgba(15, 143, 122, 0.45);
+
+  /* Severity */
+  --sev-high: #dc2626;
+  --sev-medium: #f59e0b;
+  --sev-low: #2563eb;
+  --sev-ok: #10b981;
+
+  /* Type scale */
+  --font-display: "Instrument Serif", "Cormorant Garamond", "Times New Roman", serif;
+  --font-sans: "Inter", "Geist", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "IBM Plex Mono", "SF Mono", monospace;
+
+  /* Spacing rhythm */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 6rem;
+  --space-10: 9rem;
+
+  /* Easing */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
+}
+
+/* ---------- LIGHT theme ---------- */
+.theme-light {
+  --bg-canvas: #fbfdfc;
+  --bg-surface: #ffffff;
+  --bg-elevated: #f4faf8;
+  --bg-inset: #ecf6f3;
+  --bg-overlay: rgba(15, 31, 28, 0.4);
+
+  --text-primary: #0a1f1c;
+  --text-secondary: #4a5d5a;
+  --text-tertiary: #7a8a87;
+  --text-on-brand: #ffffff;
+
+  --border-subtle: rgba(15, 143, 122, 0.12);
+  --border-default: rgba(15, 143, 122, 0.22);
+  --border-strong: rgba(15, 143, 122, 0.4);
+
+  --shadow-sm: 0 1px 2px rgba(11, 31, 28, 0.04), 0 1px 3px rgba(11, 31, 28, 0.03);
+  --shadow-md: 0 4px 12px rgba(11, 31, 28, 0.06), 0 2px 6px rgba(11, 31, 28, 0.04);
+  --shadow-lg: 0 24px 60px rgba(11, 31, 28, 0.10), 0 8px 18px rgba(11, 31, 28, 0.05);
+  --shadow-glow: 0 0 0 1px rgba(15, 143, 122, 0.12), 0 18px 48px rgba(15, 143, 122, 0.18);
+
+  --grid-line: rgba(15, 143, 122, 0.08);
+  --mesh-1: rgba(15, 143, 122, 0.08);
+  --mesh-2: rgba(45, 212, 191, 0.06);
+}
+
+/* ---------- DARK theme ---------- */
+.theme-dark {
+  --bg-canvas: #050b0a;
+  --bg-surface: #0a1614;
+  --bg-elevated: #0f1f1c;
+  --bg-inset: #142824;
+  --bg-overlay: rgba(0, 0, 0, 0.6);
+
+  --text-primary: #f0fdfa;
+  --text-secondary: #a8b8b5;
+  --text-tertiary: #6a7a76;
+  --text-on-brand: #ffffff;
+
+  --border-subtle: rgba(159, 224, 212, 0.08);
+  --border-default: rgba(159, 224, 212, 0.14);
+  --border-strong: rgba(159, 224, 212, 0.28);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.6), 0 8px 18px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 0 1px rgba(15, 143, 122, 0.4), 0 18px 60px rgba(15, 143, 122, 0.28);
+
+  --grid-line: rgba(159, 224, 212, 0.04);
+  --mesh-1: rgba(15, 143, 122, 0.18);
+  --mesh-2: rgba(45, 212, 191, 0.10);
+}
+
+/* ---------- Shared resets used by previews ---------- */
+.preview-root {
+  background: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
+
+.preview-root *,
+.preview-root *::before,
+.preview-root *::after {
+  box-sizing: border-box;
+}
+
+.preview-root h1,
+.preview-root h2,
+.preview-root h3,
+.preview-root h4,
+.preview-root p,
+.preview-root ul,
+.preview-root ol {
+  margin: 0;
+}
+
+.preview-root a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.preview-root button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local("Instrument Serif");
+}
