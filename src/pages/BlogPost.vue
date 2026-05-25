@@ -2,6 +2,11 @@
 import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { marked } from "marked";
+import PreviewHeader from "../components/preview/PreviewHeader.vue";
+import PreviewFooter from "../components/preview/PreviewFooter.vue";
+import DemoModal from "../components/preview/DemoModal.vue";
+
+const showDemo = ref(false);
 
 const route = useRoute();
 const router = useRouter();
@@ -30,7 +35,7 @@ const post = computed(() => {
   return {
     slug,
     title: meta.title || slug,
-    tag: meta.tag || "Insight",
+    tag: meta.tag || "Blog",
     publishedAt: meta.publishedAt || "",
     readMinutes: meta.readMinutes || 5,
     html: marked.parse(body)
@@ -45,15 +50,22 @@ watch(post, (p) => {
 </script>
 
 <template>
-  <main v-if="post" class="post theme-light preview-root">
-    <article class="post__inner">
-      <p class="post__back"><router-link to="/blog">← All insights</router-link></p>
-      <p class="post__tag">{{ post.tag }}</p>
-      <h1>{{ post.title }}</h1>
-      <p class="post__meta"><time>{{ post.publishedAt }}</time> · {{ post.readMinutes }} min read</p>
-      <div class="post__body" v-html="post.html"></div>
-    </article>
-  </main>
+  <div v-if="post" class="preview-root post">
+    <PreviewHeader @open-demo="showDemo = true" />
+
+    <main>
+      <article class="post__inner">
+        <p class="post__back"><router-link to="/blog">← All posts</router-link></p>
+        <p class="post__tag">{{ post.tag }}</p>
+        <h1>{{ post.title }}</h1>
+        <p class="post__meta"><time>{{ post.publishedAt }}</time> · {{ post.readMinutes }} min read</p>
+        <div class="post__body" v-html="post.html"></div>
+      </article>
+    </main>
+
+    <PreviewFooter />
+    <DemoModal :open="showDemo" @close="showDemo = false" />
+  </div>
 </template>
 
 <style scoped>

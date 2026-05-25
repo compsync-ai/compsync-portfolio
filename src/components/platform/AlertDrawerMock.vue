@@ -13,7 +13,7 @@ defineProps({ variant: { type: String, default: "light" } });
           <button>Open Case</button>
         </span>
       </div>
-      <h4>WIRE-003: High-Value International Wire — High-Risk Jurisdiction</h4>
+      <h4>WIRE-003: High-Value International Wire, High-Risk Jurisdiction</h4>
     </header>
 
     <div class="drawer__row">
@@ -41,7 +41,7 @@ defineProps({ variant: { type: String, default: "light" } });
     <section class="drawer__score">
       <div class="drawer__score-num">86.2</div>
       <div>
-        <p class="drawer__score-tag">High risk — immediate review required</p>
+        <p class="drawer__score-tag">High risk. Immediate review required</p>
         <p class="drawer__score-body">Rule <strong>WIRE-003</strong> triggered on Apr 10, 2:34 PM. Threshold breach detected based on transaction velocity and entity risk profile.</p>
       </div>
     </section>

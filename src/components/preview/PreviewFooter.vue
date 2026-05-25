@@ -1,4 +1,5 @@
 <script setup>
+import brandLogo from "../../assets/logo-compsync.svg";
 defineProps({ variant: { type: String, default: "light" } });
 </script>
 
@@ -7,10 +8,7 @@ defineProps({ variant: { type: String, default: "light" } });
     <div class="preview-footer__inner">
       <div class="preview-footer__brand">
         <div class="preview-footer__logo">
-          <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
-            <rect width="32" height="32" rx="9" fill="var(--brand)" />
-            <path d="M9 16.5L13.5 21L23 11.5" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
+          <img :src="brandLogo" alt="" width="26" height="26" class="preview-footer__logo-img" />
           <span>CompSync</span>
         </div>
         <p>Compliance infrastructure for banks, fintechs, and payment processors.</p>
@@ -77,6 +75,10 @@ defineProps({ variant: { type: String, default: "light" } });
   font-weight: 700;
   font-size: 1.05rem;
   color: var(--text-primary);
+}
+.preview-footer__logo-img {
+  display: block;
+  border-radius: 7px;
 }
 .preview-footer__links {
   display: grid;

@@ -1,6 +1,11 @@
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { blogTeasers } from "../data/project";
+import PreviewHeader from "../components/preview/PreviewHeader.vue";
+import PreviewFooter from "../components/preview/PreviewFooter.vue";
+import DemoModal from "../components/preview/DemoModal.vue";
+
+const showDemo = ref(false);
 
 // Eager-load all markdown posts so we can show metadata for everything
 const modules = import.meta.glob("../content/blog/*.md", { eager: true, query: "?raw", import: "default" });
@@ -27,7 +32,7 @@ const posts = computed(() => {
       slug,
       title: meta.title || slug,
       excerpt: meta.excerpt || "",
-      tag: meta.tag || "Insight",
+      tag: meta.tag || "Blog",
       readMinutes: Number(meta.readMinutes || 5),
       publishedAt: meta.publishedAt || ""
     };
@@ -39,33 +44,40 @@ const posts = computed(() => {
 </script>
 
 <template>
-  <main class="blog-index theme-light preview-root">
-    <header class="blog-index__hero">
-      <div class="blog-index__inner">
-        <p class="eyebrow">Insights</p>
-        <h1>Notes from the CompSync team on compliance, risk, and the future of AML.</h1>
-        <p class="lead">Field notes for compliance officers, fraud teams, and the engineers building the next generation of risk infrastructure.</p>
-      </div>
-    </header>
+  <div class="preview-root blog-index">
+    <PreviewHeader @open-demo="showDemo = true" />
 
-    <section class="blog-index__list">
-      <article v-for="post in posts" :key="post.slug" class="post-card">
-        <router-link :to="`/blog/${post.slug}`" class="post-card__link">
-          <p class="post-card__tag">{{ post.tag }}</p>
-          <h2>{{ post.title }}</h2>
-          <p class="post-card__excerpt">{{ post.excerpt }}</p>
-          <footer class="post-card__meta">
-            <time>{{ post.publishedAt }}</time>
-            <span>· {{ post.readMinutes }} min read</span>
-          </footer>
-        </router-link>
-      </article>
-    </section>
+    <main>
+      <header class="blog-index__hero">
+        <div class="blog-index__inner">
+          <p class="eyebrow">Blog</p>
+          <h1>Notes from the CompSync team on compliance, risk, and the future of AML.</h1>
+          <p class="lead">Field notes for compliance officers, fraud teams, and the engineers building the next generation of risk infrastructure.</p>
+        </div>
+      </header>
 
-    <p class="blog-index__back">
-      <router-link to="/">← Back to CompSync</router-link>
-    </p>
-  </main>
+      <section class="blog-index__list">
+        <article v-for="post in posts" :key="post.slug" class="post-card">
+          <router-link :to="`/blog/${post.slug}`" class="post-card__link">
+            <p class="post-card__tag">{{ post.tag }}</p>
+            <h2>{{ post.title }}</h2>
+            <p class="post-card__excerpt">{{ post.excerpt }}</p>
+            <footer class="post-card__meta">
+              <time>{{ post.publishedAt }}</time>
+              <span>· {{ post.readMinutes }} min read</span>
+            </footer>
+          </router-link>
+        </article>
+      </section>
+
+      <p class="blog-index__back">
+        <router-link to="/preview/v1">← Back to CompSync</router-link>
+      </p>
+    </main>
+
+    <PreviewFooter />
+    <DemoModal :open="showDemo" @close="showDemo = false" />
+  </div>
 </template>
 
 <style scoped>

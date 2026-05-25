@@ -1,11 +1,16 @@
 <script setup>
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
 import { useTheme } from "../../composables/useTheme";
+import brandLogo from "../../assets/logo-compsync.svg";
 
 defineEmits(["open-demo"]);
 
 const { theme, toggleTheme } = useTheme();
+const route = useRoute();
 const isScrolled = ref(false);
+
+const isBlog = computed(() => route.name === "blog-index" || route.name === "blog-post");
 
 function onScroll() {
   isScrolled.value = window.scrollY > 24;
@@ -24,19 +29,16 @@ onBeforeUnmount(() => {
 <template>
   <header class="preview-header" :class="{ 'preview-header--scrolled': isScrolled }">
     <div class="preview-header__inner">
-      <router-link to="/" class="preview-header__brand">
-        <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
-          <rect width="32" height="32" rx="9" fill="var(--brand)" />
-          <path d="M9 16.5L13.5 21L23 11.5" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
+      <router-link to="/preview/v1" class="preview-header__brand">
+        <img :src="brandLogo" alt="" width="30" height="30" class="preview-header__logo" />
         <span>CompSync</span>
       </router-link>
 
       <nav class="preview-header__nav" aria-label="Primary navigation">
-        <a href="#platform">Platform</a>
-        <a href="#workflow">Workflow</a>
-        <a href="#industries">Industries</a>
-        <router-link to="/blog">Insights</router-link>
+        <router-link :to="{ path: '/preview/v1', hash: '#platform' }">Platform</router-link>
+        <router-link :to="{ path: '/preview/v1', hash: '#workflow' }">Workflow</router-link>
+        <router-link :to="{ path: '/preview/v1', hash: '#industries' }">Industries</router-link>
+        <router-link to="/blog" :class="{ 'is-active': isBlog }">Blog</router-link>
       </nav>
 
       <div class="preview-header__actions">
@@ -106,6 +108,10 @@ onBeforeUnmount(() => {
   font-size: 1.05rem;
   color: var(--text-primary);
 }
+.preview-header__logo {
+  display: block;
+  border-radius: 8px;
+}
 .preview-header__nav {
   justify-self: center;
   display: inline-flex;
@@ -135,8 +141,12 @@ onBeforeUnmount(() => {
 .preview-header__nav a:hover {
   color: var(--text-primary);
 }
-.preview-header__nav a:hover::after {
+.preview-header__nav a:hover::after,
+.preview-header__nav a.is-active::after {
   transform: scaleX(1);
+}
+.preview-header__nav a.is-active {
+  color: var(--brand);
 }
 .preview-header__actions {
   display: inline-flex;

@@ -90,7 +90,7 @@ export const industries = [
     key: "fintechs",
     title: "Fintechs & Neo-banks",
     summary:
-      "Move fast on product without losing oversight — programmable rules, behavior models, and case workflows your ops team can actually use.",
+      "Move fast on product without losing oversight. Programmable rules, behavior models, and case workflows your ops team can actually use.",
     needs: ["Configurable rule engine", "API-first ingestion", "Velocity & ATO detection"]
   },
   {
@@ -104,7 +104,7 @@ export const industries = [
     key: "crypto",
     title: "Crypto & Digital Asset",
     summary:
-      "Travel rule, sanctions screening, and wallet-graph analysis as primary signals — not bolt-ons.",
+      "Travel rule, sanctions screening, and wallet-graph analysis as primary signals, not bolt-ons.",
     needs: ["Travel rule workflow", "Wallet attribution", "OFAC / FATF screening"]
   }
 ];
@@ -121,7 +121,7 @@ export const platformPillars = [
     tag: "Behavior",
     title: "Detect what static thresholds miss.",
     body:
-      "Velocity spikes, structuring, layering, account takeover and unusual geographic patterns — surfaced as explainable risk scores with the underlying signals attached.",
+      "Velocity spikes, structuring, layering, account takeover, and unusual geographic patterns. Surfaced as explainable risk scores with the underlying signals attached.",
     metric: "30+ rule packs ready"
   },
   {
@@ -135,7 +135,7 @@ export const platformPillars = [
     tag: "Reporting",
     title: "Program health you can hand to your board.",
     body:
-      "SAR conversion funnel, alert aging, false-positive rates, training completion — all mapped to FFIEC examiner findings and regulator-ready exports.",
+      "SAR conversion funnel, alert aging, false-positive rates, training completion. All mapped to FFIEC examiner findings and regulator-ready exports.",
     metric: "FinCEN, FATF, AML/CFT"
   }
 ];
@@ -170,7 +170,7 @@ export const workflowNarrative = [
 export const blogTeasers = [
   {
     slug: "ai-in-aml-2026",
-    title: "Why AML programs are finally ready for AI — and what to ask vendors before buying",
+    title: "Why AML programs are finally ready for AI, and what to ask vendors before buying",
     excerpt:
       "Examiners are no longer skeptical of AI-assisted triage. But the questions they ask have changed.",
     tag: "Compliance trends",
@@ -188,7 +188,7 @@ export const blogTeasers = [
   },
   {
     slug: "false-positive-tax",
-    title: "The false positive tax — and a five-question audit you can run today",
+    title: "The false positive tax, and a five-question audit you can run today",
     excerpt:
       "Most BSA teams accept 60-80% false positive rates as normal. They shouldn't. Here's how to actually measure (and reduce) yours.",
     tag: "Operations",
@@ -207,7 +207,7 @@ export const heroHeadline = {
   eyebrow: "Compliance infrastructure for modern finance",
   title: "Real-time transaction monitoring with audit trails examiners trust.",
   lead:
-    "Stream every transaction through configurable rules and behavior models, investigate alerts as fully-assembled cases, and ship FinCEN-ready filings — all on one platform."
+    "Stream every transaction through configurable rules and behavior models, investigate alerts as fully-assembled cases, and ship FinCEN-ready filings. All on one platform."
 };
 
 export const trustBar = [

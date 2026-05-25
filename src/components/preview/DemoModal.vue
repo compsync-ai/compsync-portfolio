@@ -33,7 +33,7 @@ async function submit() {
     const elapsed = Date.now() - startedAt;
     if (elapsed < minLoading) await new Promise(r => setTimeout(r, minLoading - elapsed));
     state.value = "success";
-    feedback.value = "Thanks — we'll reach out within one business day.";
+    feedback.value = "Thanks, we'll reach out within one business day.";
     form.fullName = ""; form.companyName = ""; form.email = ""; form.message = "";
     if (resetTimer) clearTimeout(resetTimer);
     resetTimer = setTimeout(() => { state.value = "idle"; }, 3200);
@@ -73,7 +73,7 @@ onBeforeUnmount(() => {
         </header>
 
         <p class="demo-modal__intro">
-          We'll set up a discovery call to map your rules, current workflow, and rollout path — typically 30 minutes.
+          We'll set up a discovery call to map your rules, current workflow, and rollout path. Typically 30 minutes.
         </p>
 
         <form class="demo-form" @submit.prevent="submit">

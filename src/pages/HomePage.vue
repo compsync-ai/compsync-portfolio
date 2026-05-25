@@ -118,7 +118,7 @@ watch(isDemoModalOpen, (open) => {
       <p>
         <strong>New design preview:</strong>
         <router-link to="/preview/v1">View the new design (V1)</router-link>
-        <span class="preview-banner__hint">— with a light/dark toggle in the header</span>
+        <span class="preview-banner__hint">(with a light/dark toggle in the header)</span>
       </p>
     </div>
 

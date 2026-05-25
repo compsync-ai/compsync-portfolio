@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
+import brandLogo from "../../assets/logo-compsync.svg";
 
 const props = defineProps({
   variant: { type: String, default: "light" }
@@ -43,9 +44,7 @@ onMounted(() => {
   <article class="dash" :class="`dash--${variant}`" aria-hidden="true">
     <header class="dash__topbar">
       <div class="dash__brand">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
-          <path d="M4 12L9 17L20 6" />
-        </svg>
+        <img :src="brandLogo" alt="" width="20" height="20" class="dash__brand-logo" />
         <span>CompSync</span>
       </div>
       <div class="dash__search">
@@ -272,6 +271,10 @@ onMounted(() => {
   font-weight: 700;
   font-size: 13px;
   color: var(--brand);
+}
+.dash__brand-logo {
+  display: block;
+  border-radius: 5px;
 }
 
 .dash--dark .dash__brand {

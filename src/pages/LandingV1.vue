@@ -160,9 +160,9 @@ onBeforeUnmount(() => {
         <div class="lp-container">
           <div class="lp-section-head lp-reveal">
             <p class="lp-eyebrow">The platform</p>
-            <h2>Everything a compliance team needs — assembled, not glued together.</h2>
+            <h2>Everything a compliance team needs, assembled, not glued together.</h2>
             <p class="lp-section-sub">
-              CompSync is one operating layer that monitors, scores, investigates, and reports — with the audit trail running through every action.
+              CompSync is one operating layer that monitors, scores, investigates, and reports. The audit trail runs through every action.
             </p>
           </div>
 
@@ -200,13 +200,13 @@ onBeforeUnmount(() => {
             <p class="lp-eyebrow">Investigation, not triage</p>
             <h2>Every alert arrives investigation-ready.</h2>
             <p class="lp-section-sub">
-              When an alert opens, your analyst sees the entity context, the triggered transaction, the rule that fired, the risk score breakdown, and AI-suggested next steps — all on one screen, all logged to the audit trail.
+              When an alert opens, your analyst sees the entity context, the triggered transaction, the rule that fired, the risk score breakdown, and AI-suggested next steps. All on one screen, all logged to the audit trail.
             </p>
             <ul class="lp-invest__list">
-              <li><strong>Explainable scoring</strong> — every score traces to a rule, a signal, and a threshold.</li>
-              <li><strong>Guided checklist</strong> — investigation steps mapped to your program's policy.</li>
-              <li><strong>Shadow new rules</strong> — test against historical traffic before going live.</li>
-              <li><strong>Audit-grade log</strong> — every analyst action, model output, and disposition recorded.</li>
+              <li><strong>Explainable scoring.</strong> Every score traces to a rule, a signal, and a threshold.</li>
+              <li><strong>Guided checklist.</strong> Investigation steps mapped to your program's policy.</li>
+              <li><strong>Shadow new rules.</strong> Test against historical traffic before going live.</li>
+              <li><strong>Audit-grade log.</strong> Every analyst action, model output, and disposition recorded.</li>
             </ul>
           </div>
           <div class="lp-invest__product lp-reveal">
@@ -220,7 +220,7 @@ onBeforeUnmount(() => {
         <div class="lp-container">
           <div class="lp-section-head lp-reveal">
             <p class="lp-eyebrow">Built for</p>
-            <h2>The compliance stack — wherever you live in financial services.</h2>
+            <h2>The compliance stack, wherever you live in financial services.</h2>
           </div>
 
           <div class="lp-industries__grid">
@@ -237,11 +237,11 @@ onBeforeUnmount(() => {
         </div>
       </section>
 
-      <!-- INSIGHTS / BLOG -->
+      <!-- BLOG -->
       <section class="lp-section lp-blog">
         <div class="lp-container">
           <div class="lp-section-head lp-reveal">
-            <p class="lp-eyebrow">Insights</p>
+            <p class="lp-eyebrow">Blog</p>
             <h2>Field notes from the CompSync team.</h2>
             <p class="lp-section-sub">Compliance trends, engineering deep-dives, and operational playbooks.</p>
           </div>
@@ -257,7 +257,7 @@ onBeforeUnmount(() => {
             </router-link>
           </div>
           <p class="lp-blog__all">
-            <router-link to="/blog">Read all insights →</router-link>
+            <router-link to="/blog">Read all posts →</router-link>
           </p>
         </div>
       </section>
@@ -267,8 +267,8 @@ onBeforeUnmount(() => {
         <div class="lp-cta__inner lp-reveal">
           <div class="lp-cta__copy">
             <p class="lp-eyebrow">Talk to CompSync</p>
-            <h2>Compliance infrastructure your examiner will recognize — your ops team will love.</h2>
-            <p>We're working with a small number of early adopters across banking, fintech, payments, and crypto. If you're evaluating a modern AML/compliance stack, we can show you exactly how CompSync would fit your program — usually inside one 30-minute call.</p>
+            <h2>Compliance infrastructure your examiner will recognize, your ops team will love.</h2>
+            <p>We're working with a small number of early adopters across banking, fintech, payments, and crypto. If you're evaluating a modern AML/compliance stack, we can show you exactly how CompSync would fit your program, usually inside one 30-minute call.</p>
           </div>
           <div class="lp-cta__actions">
             <button type="button" class="lp-btn lp-btn--primary lp-btn--xl" @click="showDemo = true">
@@ -293,7 +293,7 @@ onBeforeUnmount(() => {
   background: var(--bg-canvas);
   color: var(--text-primary);
   font-family: var(--font-sans);
-  overflow-x: hidden;
+  overflow-x: clip;
   transition: background 320ms ease, color 320ms ease;
 }
 
