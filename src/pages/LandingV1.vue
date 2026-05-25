@@ -96,7 +96,7 @@ onBeforeUnmount(() => {
       <!-- HERO -->
       <section ref="heroRef" class="lp-hero" id="platform">
         <div class="lp-hero__bg">
-          <ParticleNetwork :variant="theme" :particle-count="140" :max-connections="6" :connection-distance="1.6" />
+          <ParticleNetwork :variant="theme" :particle-count="85" :max-connections="3" :connection-distance="1.35" />
           <div class="lp-hero__grid"></div>
           <div class="lp-hero__mesh"></div>
         </div>
@@ -474,8 +474,17 @@ onBeforeUnmount(() => {
   color: var(--text-primary);
   border: 1px solid var(--border-default);
 }
-.theme-dark .lp-btn--ghost { background: rgba(255, 255, 255, 0.04); }
-.lp-btn--ghost:hover { border-color: var(--brand); color: var(--brand); }
+.theme-dark .lp-btn--ghost {
+  background: rgba(45, 212, 191, 0.08);
+  border-color: rgba(45, 212, 191, 0.35);
+  color: #2dd4bf;
+}
+.lp-btn--ghost:hover { border-color: var(--brand); color: var(--brand); background: var(--bg-elevated); }
+.theme-dark .lp-btn--ghost:hover {
+  border-color: #2dd4bf;
+  color: #2dd4bf;
+  background: rgba(45, 212, 191, 0.15);
+}
 .lp-btn--xl { padding: 1rem 1.6rem; font-size: 1rem; }
 .lp-btn svg { transition: transform 220ms var(--ease-out-quint); }
 .lp-btn:hover svg { transform: translateX(3px); }

@@ -8,9 +8,10 @@ const props = defineProps({
     default: "light",
     validator: (v) => ["light", "dark"].includes(v)
   },
-  particleCount: { type: Number, default: 130 },
-  maxConnections: { type: Number, default: 7 },
-  connectionDistance: { type: Number, default: 1.6 }
+  particleCount: { type: Number, default: 90 },
+  maxConnections: { type: Number, default: 4 },
+  connectionDistance: { type: Number, default: 1.4 },
+  fadeCenter: { type: Boolean, default: true }
 });
 
 const canvasRef = ref(null);
@@ -29,7 +30,7 @@ function palette() {
       particleSoft: new THREE.Color("#0f8f7a"),
       line: new THREE.Color("#2dd4bf"),
       lineFar: new THREE.Color("#0f8f7a"),
-      lineAlpha: 0.34,
+      lineAlpha: 0.55,
       bg: new THREE.Color("#050b0a")
     };
   }
@@ -38,7 +39,7 @@ function palette() {
     particleSoft: new THREE.Color("#16a085"),
     line: new THREE.Color("#0f8f7a"),
     lineFar: new THREE.Color("#9fe0d4"),
-    lineAlpha: 0.22,
+    lineAlpha: 0.14,
     bg: new THREE.Color("#fbfdfc")
   };
 }
@@ -272,6 +273,10 @@ function refreshParticleColors() {
     arr[i * 3 + 2] = c.b;
   }
   colorAttr.needsUpdate = true;
+  if (lineMesh) {
+    lineMesh.material.opacity = colors.lineAlpha;
+    lineMesh.material.needsUpdate = true;
+  }
 }
 
 onMounted(() => {
@@ -319,5 +324,8 @@ onBeforeUnmount(() => {
   height: 100%;
   display: block;
   pointer-events: none;
+  /* Softly fade the network around the text region so it frames content rather than overlapping it */
+  mask-image: radial-gradient(ellipse 65% 70% at 30% 45%, transparent 0%, rgba(0, 0, 0, 0.35) 35%, black 75%);
+  -webkit-mask-image: radial-gradient(ellipse 65% 70% at 30% 45%, transparent 0%, rgba(0, 0, 0, 0.35) 35%, black 75%);
 }
 </style>
