@@ -71,7 +71,7 @@ const posts = computed(() => {
       </section>
 
       <p class="blog-index__back">
-        <router-link to="/preview/v1">← Back to CompSync</router-link>
+        <router-link to="/">← Back to CompSync</router-link>
       </p>
     </main>
 

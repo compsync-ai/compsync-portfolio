@@ -29,15 +29,15 @@ onBeforeUnmount(() => {
 <template>
   <header class="preview-header" :class="{ 'preview-header--scrolled': isScrolled }">
     <div class="preview-header__inner">
-      <router-link to="/preview/v1" class="preview-header__brand">
+      <router-link to="/" class="preview-header__brand">
         <img :src="brandLogo" alt="" width="30" height="30" class="preview-header__logo" />
         <span>CompSync</span>
       </router-link>
 
       <nav class="preview-header__nav" aria-label="Primary navigation">
-        <router-link :to="{ path: '/preview/v1', hash: '#platform' }">Platform</router-link>
-        <router-link :to="{ path: '/preview/v1', hash: '#workflow' }">Workflow</router-link>
-        <router-link :to="{ path: '/preview/v1', hash: '#industries' }">Industries</router-link>
+        <router-link :to="{ path: '/', hash: '#platform' }">Platform</router-link>
+        <router-link :to="{ path: '/', hash: '#workflow' }">Workflow</router-link>
+        <router-link :to="{ path: '/', hash: '#industries' }">Industries</router-link>
         <router-link to="/blog" :class="{ 'is-active': isBlog }">Blog</router-link>
       </nav>
 
