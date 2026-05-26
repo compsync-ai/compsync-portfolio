@@ -79,6 +79,7 @@ const post = computed(() => {
     slug,
     title: meta.title || slug,
     titleHtml: meta.titleHtml || "",
+    author: meta.author || "",
     tag: meta.tag || "Blog",
     publishedAt: meta.publishedAt || "",
     readMinutes: meta.readMinutes || 5,
@@ -103,7 +104,7 @@ watch(post, (p) => {
         <p class="post__tag">{{ post.tag }}</p>
         <h1 v-if="post.titleHtml" v-html="post.titleHtml"></h1>
         <h1 v-else>{{ post.title }}</h1>
-        <p class="post__meta"><time>{{ post.publishedAt }}</time> · {{ post.readMinutes }} min read</p>
+        <p class="post__meta"><template v-if="post.author"><span class="post__byline">By {{ post.author }}</span> · </template><time>{{ post.publishedAt }}</time> · {{ post.readMinutes }} min read</p>
         <div class="post__body" v-html="post.html"></div>
       </article>
     </main>
@@ -152,6 +153,10 @@ watch(post, (p) => {
   color: var(--text-tertiary);
   font-size: 0.9rem;
   margin: 0 0 var(--space-6);
+}
+.post__byline {
+  color: var(--text-secondary);
+  font-weight: 600;
 }
 .post__body {
   color: var(--text-primary);
@@ -213,5 +218,16 @@ watch(post, (p) => {
   font-weight: 800;
   color: var(--text-primary);
   margin: var(--space-6) 0 var(--space-3);
+}
+.post__body :deep(hr) {
+  border: 0;
+  border-top: 1px solid var(--border-subtle);
+  margin: var(--space-7) 0 var(--space-5);
+}
+.post__body :deep(p > em:only-child) {
+  display: block;
+  color: var(--text-tertiary);
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 </style>

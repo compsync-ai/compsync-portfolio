@@ -2,6 +2,7 @@
 title: What the OCC just told every sponsor bank, and what CompSync was built to fix
 titleHtml: What the OCC just told every sponsor bank,<br>and what <span class="post__brand">CompSync</span> was built to fix
 excerpt: The OCC's April 24 consent order against Community Federal Savings Bank is a clean map of the failure modes that take down sponsor-bank programs, and a checklist of what CompSync was built to prevent.
+author: Deepson S.
 tag: Regulatory
 readMinutes: 6
 publishedAt: 2026-05-22
@@ -32,3 +33,7 @@ The harder problem CFSB had is the one the industry barely talks about: the gap 
 For the sponsor-bank side of this story, the bigger point: the OCC is signaling that the partner-bank model doesn't get a quieter year just because the political weather changed. If anything, the consent orders are getting more surgical. A bank supervising a fintech program with no shared view into how that fintech's monitoring is actually performing is signing a check it can't read. The sponsor bank and the fintech see the same evidence on the same platform, and both can answer the examiner from the same audit trail.
 
 Community Federal will spend the next eighteen months doing what every bank in this position does. Hire a consultant. Run a SAR look-back. Replace people. Rewrite the risk assessment. The bill will be large. The lesson is older than any of us: a monitoring system you don't continuously test is a monitoring system you don't actually have.
+
+---
+
+*Deepson S. is the founder of CompSync and a CAMS-certified compliance professional. He writes about transaction monitoring, examiner readiness, and the practical engineering of AML programs.*
