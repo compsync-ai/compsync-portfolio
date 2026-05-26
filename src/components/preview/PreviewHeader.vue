@@ -199,12 +199,17 @@ onBeforeUnmount(() => {
 .btn-primary {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.4rem;
+  /* Height locked to the 30px brand logo so the header reads as one row.
+     Padding is horizontal only — vertical centering comes from the height +
+     align-items pairing. */
+  height: 30px;
+  padding: 0 0.85rem;
   background: var(--brand);
   color: white;
   border: 0;
-  padding: 0.6rem 1rem;
-  font-size: 0.9rem;
+  font-size: 0.82rem;
+  line-height: 1;
   font-weight: 600;
   border-radius: var(--radius-pill);
   box-shadow: 0 6px 18px var(--brand-glow);
@@ -217,6 +222,8 @@ onBeforeUnmount(() => {
   box-shadow: 0 10px 24px var(--brand-glow);
 }
 .btn-primary svg {
+  width: 12px;
+  height: 12px;
   transition: transform 220ms var(--ease-out-quint);
 }
 .btn-primary:hover svg {
@@ -226,5 +233,29 @@ onBeforeUnmount(() => {
 @media (max-width: 880px) {
   .preview-header__nav { display: none; }
   .preview-header__inner { grid-template-columns: auto 1fr; }
+  /* Hold actions to their content width and pin them to the right edge
+     so the button doesn't sit in the middle of a stretched 1fr track. */
+  .preview-header__actions { justify-self: end; gap: 0.6rem; }
+}
+
+@media (max-width: 480px) {
+  .preview-header__inner { padding: 0.65rem 1rem; gap: 0.6rem; }
+  /* Tighten the actions row at phone widths. Height stays at 30px so the
+     button still lines up with the brand logo. */
+  .btn-primary {
+    padding: 0 0.75rem;
+    font-size: 0.78rem;
+    gap: 0.3rem;
+    box-shadow: 0 4px 12px var(--brand-glow);
+  }
+  .preview-header__actions { gap: 0.5rem; }
+  .theme-toggle { width: 46px; height: 26px; }
+  .theme-toggle__thumb { width: 20px; height: 20px; }
+  .theme-toggle__thumb--dark { transform: translateX(20px); }
+  .preview-header__brand { font-size: 0.95rem; gap: 0.4rem; }
+}
+
+@media (max-width: 360px) {
+  .btn-primary { padding: 0 0.65rem; font-size: 0.76rem; }
 }
 </style>

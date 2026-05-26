@@ -371,6 +371,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .dash {
   width: 100%;
+  min-width: 0;
   border-radius: var(--radius-lg);
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
@@ -380,6 +381,17 @@ onBeforeUnmount(() => {
   font-size: 12px;
   line-height: 1.4;
   color: var(--text-primary);
+}
+/* Grid items default to min-width: auto which lets intrinsic content
+   force the column wider than the track. Override so 1fr really is 1fr. */
+.dash__main,
+.dash__nav,
+.dash__kpis,
+.dash__charts,
+.dash__recent,
+.kpi,
+.chart {
+  min-width: 0;
 }
 
 .dash__topbar {
@@ -759,5 +771,71 @@ onBeforeUnmount(() => {
 .pill--open {
   background: rgba(15, 143, 122, 0.12);
   color: var(--brand);
+}
+
+/* ============== RESPONSIVE ==============
+   The dashboard is a recreation of the real product UI which assumes a
+   desktop layout. On narrow viewports we collapse the sidebar, stack
+   charts, halve the KPI grid, and let the recent-alerts table scroll
+   horizontally rather than overflowing the dashboard container. */
+@media (max-width: 960px) {
+  .dash__kpis { grid-template-columns: repeat(2, 1fr); }
+  .dash__charts { grid-template-columns: 1fr; }
+  .dash__body { grid-template-columns: 160px 1fr; }
+  .dash__topbar { grid-template-columns: 160px 1fr auto; }
+}
+
+@media (max-width: 720px) {
+  .dash { font-size: 11px; }
+  /* Topbar becomes a flex row so we can hide the search bar without
+     leaving an empty grid track. */
+  .dash__topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+  .dash__search { display: none; }
+  /* Drop the sidebar — the focus on small screens is the main panel.
+     Doing this avoids the 200px sidebar pushing the main area off-screen. */
+  .dash__body { grid-template-columns: 1fr; }
+  .dash__nav { display: none; }
+  .dash__main { padding: 12px; gap: 10px; }
+  .dash__title h3 { font-size: 14px; }
+  .dash__title p { font-size: 10px; }
+  /* Recent-alerts table is fundamentally wide — wrap it in horizontal
+     scroll so the dashboard mock keeps its own width clean. */
+  .dash__recent {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    min-width: 0;
+  }
+  .dash__recent table { min-width: 420px; width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .dash__kpis { gap: 8px; }
+  .kpi { padding: 9px 10px 8px; }
+  .kpi__value { font-size: 17px; }
+  .kpi__label { font-size: 9px; }
+  .kpi__delta { font-size: 8.5px; }
+  .kpi__icon { width: 18px; height: 18px; font-size: 10px; top: 8px; right: 8px; }
+  /* Donut row stacks the visual over the legend so neither gets crushed. */
+  .donut {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: left;
+    gap: 8px;
+  }
+  .donut svg { width: 110px; }
+  .donut__legend {
+    width: 100%;
+    max-width: 240px;
+  }
+  .chart__plot { height: 96px; }
+  .dash__topbar { padding: 8px 10px; gap: 8px; }
+  .dash__brand { font-size: 12px; }
+  .dash__avatar { width: 20px; height: 20px; font-size: 8px; }
 }
 </style>

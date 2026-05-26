@@ -1159,5 +1159,55 @@ onBeforeUnmount(() => {
 @media (max-width: 720px) {
   .lp-metrics__inner { grid-template-columns: 1fr 1fr; }
   .lp-industries__grid { grid-template-columns: 1fr; }
+
+  /* Tighten the hero eyebrow pill so it doesn't wrap into a bulky block. */
+  .preview-root .lp-hero__eyebrow {
+    margin-bottom: 1.1rem;
+    padding: 0.26rem 0.7rem;
+    font-size: 0.7rem;
+    gap: 0.4rem;
+  }
+  .lp-hero__eyebrow-dot { width: 5px; height: 5px; }
+
+  /* Bento: at mobile widths the 2-column grid makes each cell too narrow
+     for the headline copy. Stack to one column and tighten padding/type. */
+  .lp-bento { grid-template-columns: 1fr; gap: 0.85rem; }
+  .lp-bento__cell { padding: 1.25rem 1.2rem; }
+  .lp-bento__cell h3 { font-size: 1.05rem; }
+  .lp-bento__cell p { font-size: 0.9rem; line-height: 1.55; }
+  .lp-bento__metric {
+    /* Metric was clipping in the narrow cell because of nowrap. Let it wrap
+       if it has to, but also shrink the font so it almost always fits. */
+    white-space: normal;
+    font-size: 0.76rem;
+    padding-top: 0.7rem;
+  }
+
+  /* Section heading: trim the display-serif headline so it doesn't wrap
+     awkwardly into very tall blocks on phones. */
+  .lp-section-head { margin-bottom: 2rem; }
+  .lp-section-head h2 { font-size: clamp(1.45rem, 5.6vw, 1.8rem); }
+  .lp-section { padding: clamp(2.5rem, 7vw, 4rem) 1.25rem; }
+
+  /* Reporting + Investigation: window mock browser chrome was eating screen
+     space; trim the URL bar so the row stays clean. */
+  .lp-window__url { font-size: 0.66rem; }
+
+  /* Blog grid stays 1-column already (set at 1100px). Tighten typography. */
+  .lp-blog__card h3 { font-size: 1rem; }
+}
+@media (max-width: 480px) {
+  .preview-root .lp-hero__eyebrow {
+    padding: 0.22rem 0.6rem;
+    font-size: 0.64rem;
+    letter-spacing: 0.015em;
+  }
+  .lp-hero__title { font-size: clamp(1.9rem, 9vw, 2.6rem) !important; }
+  .lp-hero__lead { font-size: 0.98rem; }
+  .lp-bento__cell { padding: 1.1rem 1rem; }
+  .lp-bento__cell h3 { font-size: 1rem; }
+  .lp-bento__metric { font-size: 0.72rem; }
+  /* KPI metric strip: 2x2 grid each value gets less room — scale text down. */
+  .lp-metric__value { font-size: clamp(1.4rem, 5.4vw, 1.8rem); }
 }
 </style>
