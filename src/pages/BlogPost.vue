@@ -78,6 +78,7 @@ const post = computed(() => {
   return {
     slug,
     title: meta.title || slug,
+    titleHtml: meta.titleHtml || "",
     tag: meta.tag || "Blog",
     publishedAt: meta.publishedAt || "",
     readMinutes: meta.readMinutes || 5,
@@ -100,7 +101,8 @@ watch(post, (p) => {
       <article class="post__inner">
         <p class="post__back"><router-link to="/blog">← All posts</router-link></p>
         <p class="post__tag">{{ post.tag }}</p>
-        <h1>{{ post.title }}</h1>
+        <h1 v-if="post.titleHtml" v-html="post.titleHtml"></h1>
+        <h1 v-else>{{ post.title }}</h1>
         <p class="post__meta"><time>{{ post.publishedAt }}</time> · {{ post.readMinutes }} min read</p>
         <div class="post__body" v-html="post.html"></div>
       </article>
@@ -117,7 +119,7 @@ watch(post, (p) => {
   padding: var(--space-7) var(--space-5) var(--space-9);
 }
 .post__inner {
-  max-width: 720px;
+  max-width: 880px;
   margin: 0 auto;
 }
 .post__back a {
@@ -137,10 +139,14 @@ watch(post, (p) => {
   margin: var(--space-3) 0 var(--space-4);
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(2rem, 4.2vw, 3rem);
-  line-height: 1.12;
+  font-size: clamp(1.75rem, 3.4vw, 2.4rem);
+  line-height: 1.18;
   letter-spacing: -0.02em;
   color: var(--text-primary);
+  max-width: none;
+}
+.post h1 :deep(.post__brand) {
+  color: var(--brand);
 }
 .post__meta {
   color: var(--text-tertiary);
@@ -193,5 +199,19 @@ watch(post, (p) => {
   border-radius: var(--radius-md);
   overflow-x: auto;
   font-size: 0.88rem;
+}
+.post__body :deep(img) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  margin: var(--space-5) auto var(--space-6);
+}
+.post__body :deep(p > strong:only-child) {
+  display: block;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: var(--space-6) 0 var(--space-3);
 }
 </style>

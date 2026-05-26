@@ -169,31 +169,13 @@ export const workflowNarrative = [
 
 export const blogTeasers = [
   {
-    slug: "ai-in-aml-2026",
-    title: "Why AML programs are finally ready for AI, and what to ask vendors before buying",
+    slug: "occ-cfsb-consent-order",
+    title: "What the OCC just told every sponsor bank, and what CompSync was built to fix",
     excerpt:
-      "Examiners are no longer skeptical of AI-assisted triage. But the questions they ask have changed.",
-    tag: "Compliance trends",
+      "The OCC's April 24 consent order against Community Federal Savings Bank is a clean map of the failure modes that take down sponsor-bank programs, and a checklist of what CompSync was built to prevent.",
+    tag: "Regulatory",
     readMinutes: 6,
-    publishedAt: "2026-04-22"
-  },
-  {
-    slug: "building-explainable-rules",
-    title: "Explainable rules: how we ship dynamic models without losing examiner trust",
-    excerpt:
-      "A practical look at how CompSync structures risk scoring so every alert can be unwound back to a rule, a signal, and a threshold.",
-    tag: "Engineering",
-    readMinutes: 8,
-    publishedAt: "2026-04-08"
-  },
-  {
-    slug: "false-positive-tax",
-    title: "The false positive tax, and a five-question audit you can run today",
-    excerpt:
-      "Most BSA teams accept 60-80% false positive rates as normal. They shouldn't. Here's how to actually measure (and reduce) yours.",
-    tag: "Operations",
-    readMinutes: 5,
-    publishedAt: "2026-03-19"
+    publishedAt: "2026-05-22"
   }
 ];
 

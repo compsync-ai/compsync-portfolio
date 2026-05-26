@@ -35,6 +35,11 @@ const animatedKpis = ref([
 // Each entry tracks the text typed so far + whether the cursor should blink.
 const metricsTyped = ref(platformPillars.map(() => ""));
 const metricsTyping = ref(platformPillars.map(() => false));
+
+// Hero title — second line is typed in with the same cursor style as the bento metrics.
+const HERO_LINE2_FULL = "with audit trails examiners trust.";
+const heroLine2Typed = ref("");
+const heroLine2Typing = ref(false);
 let typewriterStarted = false;
 let typewriterObserver = null;
 let typewriterTimeouts = [];
@@ -98,6 +103,7 @@ function startKpiCount() {
 
 onMounted(() => {
   const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
   if (headlineRef.value) {
     tl.from(headlineRef.value.querySelectorAll(".lp-hero__eyebrow, .lp-hero__title, .lp-hero__lead, .lp-hero__cta, .lp-hero__trust"), {
       y: 26,
@@ -109,6 +115,28 @@ onMounted(() => {
   if (productRef.value) {
     tl.from(productRef.value, { y: 40, opacity: 0, duration: 1.1, ease: "power4.out" }, "-=0.5");
   }
+
+  // Type the hero title's second line — same cursor style as the bento metrics.
+  const heroTypeStart = setTimeout(() => {
+    if (!isAlive) return;
+    heroLine2Typing.value = true;
+    let i = 0;
+    const typeNext = () => {
+      if (!isAlive) return;
+      i += 1;
+      heroLine2Typed.value = HERO_LINE2_FULL.slice(0, i);
+      if (i < HERO_LINE2_FULL.length) {
+        typewriterTimeouts.push(setTimeout(typeNext, 38));
+      } else {
+        typewriterTimeouts.push(setTimeout(() => {
+          if (!isAlive) return;
+          heroLine2Typing.value = false;
+        }, 320));
+      }
+    };
+    typeNext();
+  }, 900);
+  typewriterTimeouts.push(heroTypeStart);
 
   const revealEls = document.querySelectorAll(".lp-reveal");
   reveals = Array.from(revealEls).map((el) => {
@@ -176,9 +204,15 @@ onBeforeUnmount(() => {
               {{ heroHeadline.eyebrow }}
             </p>
             <h1 class="lp-hero__title">
-              <span>Real-time</span>
-              <span class="lp-hero__title-accent">transaction monitoring</span>
-              <span>with audit trails examiners&nbsp;trust.</span>
+              <span class="lp-hero__title-row">
+                <span>Real-time</span>
+                <span class="lp-hero__title-accent">transaction monitoring</span>
+              </span>
+              <span class="lp-hero__title-line2" :aria-label="HERO_LINE2_FULL"><span aria-hidden="true">{{ heroLine2Typed }}</span><span
+                  v-if="heroLine2Typing"
+                  class="lp-hero__title-cursor"
+                  aria-hidden="true"
+                ></span></span>
             </h1>
             <p class="lp-hero__lead">{{ heroHeadline.lead }}</p>
             <div class="lp-hero__cta">
@@ -432,8 +466,8 @@ onBeforeUnmount(() => {
 }
 .lp-hero__copy { max-width: 920px; }
 
-.lp-hero__eyebrow {
-  margin: 0 0 1.3rem;
+.preview-root .lp-hero__eyebrow {
+  margin: 0 0 1.65rem;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -458,6 +492,7 @@ onBeforeUnmount(() => {
 
 .lp-hero__title {
   margin: 0;
+  max-width: none;
   display: flex;
   flex-direction: column;
   gap: 0.1em;
@@ -467,6 +502,25 @@ onBeforeUnmount(() => {
   line-height: 1.05;
   letter-spacing: -0.025em;
   color: var(--text-primary);
+}
+.lp-hero__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.32em;
+  align-items: baseline;
+}
+.lp-hero__title-line2 {
+  display: block;
+  min-height: 1.05em;
+}
+.lp-hero__title-cursor {
+  display: inline-block;
+  width: 0.45ch;
+  height: 0.78em;
+  vertical-align: -0.04em;
+  margin-left: 0.08em;
+  background: currentColor;
+  animation: lpCursorBlink 0.85s steps(1) infinite;
 }
 .lp-hero__title-accent {
   font-style: italic;
@@ -482,11 +536,11 @@ onBeforeUnmount(() => {
   color: transparent;
 }
 
-.lp-hero__lead {
-  margin: 1.4rem 0 0;
+.preview-root .lp-hero__lead {
+  margin: 1.8rem 0 0;
   max-width: 56ch;
   color: var(--text-secondary);
-  font-size: 1.12rem;
+  font-size: 1.02rem;
   line-height: 1.62;
 }
 .lp-hero__cta {
@@ -497,7 +551,7 @@ onBeforeUnmount(() => {
 }
 .lp .lp-hero__trust {
   list-style: none;
-  margin: 1rem 0 0;
+  margin: 2.2rem 0 0;
   padding: 0;
   display: flex;
   gap: 1.4rem;
@@ -651,6 +705,10 @@ onBeforeUnmount(() => {
   font-size: 1.02rem;
   line-height: 1.65;
   max-width: 56ch;
+}
+.lp-invest__copy .lp-section-sub,
+.lp-reporting__copy .lp-section-sub {
+  margin: 0.75rem 0 1rem;
 }
 
 /* ============== BENTO ============== */
@@ -1018,7 +1076,8 @@ onBeforeUnmount(() => {
 /* ============== BLOG ============== */
 .lp-blog__grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
+  justify-content: center;
   gap: 1.2rem;
 }
 .lp-blog__card {
@@ -1068,6 +1127,9 @@ onBeforeUnmount(() => {
 .lp .lp-blog__all {
   text-align: center;
   margin: 1rem 0 0;
+}
+.lp .lp-section.lp-blog {
+  padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
 }
 .lp-blog__all a {
   color: var(--brand);

@@ -52,7 +52,6 @@ const posts = computed(() => {
         <div class="blog-index__inner">
           <p class="eyebrow">Blog</p>
           <h1>Notes from the CompSync team on compliance, risk, and the future of AML.</h1>
-          <p class="lead">Field notes for compliance officers, fraud teams, and the engineers building the next generation of risk infrastructure.</p>
         </div>
       </header>
 
