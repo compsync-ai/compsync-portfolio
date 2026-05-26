@@ -213,8 +213,11 @@ watch(post, (p) => {
   border: 1px solid var(--border-subtle);
   margin: var(--space-5) auto var(--space-6);
 }
-.post__body :deep(p > strong:only-child) {
-  display: block;
+.post__body :deep(strong) {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.post__body :deep(.post__section) {
   font-weight: 800;
   color: var(--text-primary);
   margin: var(--space-6) 0 var(--space-3);
@@ -224,10 +227,10 @@ watch(post, (p) => {
   border-top: 1px solid var(--border-subtle);
   margin: var(--space-7) 0 var(--space-5);
 }
-.post__body :deep(p > em:only-child) {
-  display: block;
+.post__body :deep(.post__bio) {
   color: var(--text-tertiary);
   font-size: 0.95rem;
   line-height: 1.6;
+  font-style: italic;
 }
 </style>

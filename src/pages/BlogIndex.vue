@@ -32,6 +32,7 @@ const posts = computed(() => {
       slug,
       title: meta.title || slug,
       excerpt: meta.excerpt || "",
+      excerptHtml: meta.excerptHtml || "",
       tag: meta.tag || "Blog",
       readMinutes: Number(meta.readMinutes || 5),
       publishedAt: meta.publishedAt || ""
@@ -60,7 +61,8 @@ const posts = computed(() => {
           <router-link :to="`/blog/${post.slug}`" class="post-card__link">
             <p class="post-card__tag">{{ post.tag }}</p>
             <h2>{{ post.title }}</h2>
-            <p class="post-card__excerpt">{{ post.excerpt }}</p>
+            <p v-if="post.excerptHtml" class="post-card__excerpt" v-html="post.excerptHtml"></p>
+            <p v-else class="post-card__excerpt">{{ post.excerpt }}</p>
             <footer class="post-card__meta">
               <time>{{ post.publishedAt }}</time>
               <span>· {{ post.readMinutes }} min read</span>

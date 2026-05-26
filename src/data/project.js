@@ -173,6 +173,8 @@ export const blogTeasers = [
     title: "What the OCC just told every sponsor bank, and what CompSync was built to fix",
     excerpt:
       "The OCC's April 24 consent order against Community Federal Savings Bank is a clean map of the failure modes that take down sponsor-bank programs, and a checklist of what CompSync was built to prevent.",
+    excerptHtml:
+      "The OCC's April 24 consent order against <strong>Community Federal Savings Bank</strong> is a clean map of the failure modes that take down sponsor-bank programs, and a checklist of what CompSync was built to prevent.",
     tag: "Regulatory",
     readMinutes: 6,
     publishedAt: "2026-05-22"

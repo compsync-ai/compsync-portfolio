@@ -392,7 +392,8 @@ onBeforeUnmount(() => {
             <router-link v-for="post in blogTeasers" :key="post.slug" :to="`/blog/${post.slug}`" class="lp-blog__card lp-reveal">
               <p class="lp-blog__tag">{{ post.tag }}</p>
               <h3>{{ post.title }}</h3>
-              <p class="lp-blog__excerpt">{{ post.excerpt }}</p>
+              <p v-if="post.excerptHtml" class="lp-blog__excerpt" v-html="post.excerptHtml"></p>
+              <p v-else class="lp-blog__excerpt">{{ post.excerpt }}</p>
               <p class="lp-blog__meta">
                 <time>{{ post.publishedAt }}</time>
                 <span>· {{ post.readMinutes }} min read</span>
