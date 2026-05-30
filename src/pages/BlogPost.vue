@@ -117,6 +117,10 @@ watch(post, (p) => {
 <style scoped>
 .post {
   min-height: 100vh;
+}
+/* Padding lives on the article body, not on the outer wrapper, so the
+   sticky PreviewHeader stays edge-to-edge — same approach as BlogIndex. */
+.post > main {
   padding: var(--space-7) var(--space-5) var(--space-9);
 }
 .post__inner {
@@ -232,5 +236,21 @@ watch(post, (p) => {
   font-size: 0.95rem;
   line-height: 1.6;
   font-style: italic;
+}
+
+@media (max-width: 720px) {
+  /* Trim the very generous bottom padding so the post doesn't leave
+     a giant white slab between the bio and the footer on phones. */
+  .post > main { padding: var(--space-5) var(--space-4) var(--space-6); }
+  .post h1 { font-size: clamp(1.5rem, 6.4vw, 2rem); }
+  .post__tag { margin-top: var(--space-4); font-size: 0.72rem; }
+  .post__meta { font-size: 0.82rem; margin-bottom: var(--space-5); }
+  /* Body type was 17px on phones which read big next to the trim
+     header. 16px sits more naturally on small screens. */
+  .post__body { font-size: 1rem; line-height: 1.68; }
+  .post__body :deep(h2) { font-size: 1.4rem; margin: var(--space-6) 0 var(--space-3); }
+  .post__body :deep(h3) { font-size: 1.1rem; }
+  .post__body :deep(blockquote) { padding: 0.2rem 0 0.2rem 0.85rem; }
+  .post__body :deep(pre) { padding: 0.85rem; font-size: 0.82rem; }
 }
 </style>

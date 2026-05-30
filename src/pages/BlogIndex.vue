@@ -176,4 +176,18 @@ const posts = computed(() => {
   color: var(--brand);
   border-bottom: 1px dashed currentColor;
 }
+
+@media (max-width: 720px) {
+  /* Hero was 96px top / 48px bottom — way too generous for a phone screen.
+     Trim and let the title settle on three readable lines. */
+  .blog-index__hero { padding: var(--space-6) var(--space-4) var(--space-5); }
+  .blog-index__hero h1 { font-size: clamp(1.6rem, 6.8vw, 2.2rem); }
+  .blog-index__list { margin-top: var(--space-5); padding: 0 var(--space-4); gap: var(--space-4); }
+  /* Reduce card padding so titles get more horizontal room and don't
+     wrap into 4-5 line stacks on phones. */
+  .post-card__link { padding: var(--space-4) var(--space-4); }
+  .post-card h2 { font-size: 1.05rem; line-height: 1.3; }
+  .post-card__excerpt { font-size: 0.92rem; }
+  .post-card__meta { font-size: 0.78rem; }
+}
 </style>

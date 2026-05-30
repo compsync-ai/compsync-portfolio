@@ -211,6 +211,7 @@ onBeforeUnmount(() => {
   font-size: 0.82rem;
   line-height: 1;
   font-weight: 600;
+  white-space: nowrap;
   border-radius: var(--radius-pill);
   box-shadow: 0 6px 18px var(--brand-glow);
   cursor: pointer;
