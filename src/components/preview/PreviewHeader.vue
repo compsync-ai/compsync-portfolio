@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useTheme } from "../../composables/useTheme";
 import brandLogo from "../../assets/logo-compsync.svg";
@@ -9,6 +9,7 @@ defineEmits(["open-demo"]);
 const { theme, toggleTheme } = useTheme();
 const route = useRoute();
 const isScrolled = ref(false);
+const mobileOpen = ref(false);
 
 const isBlog = computed(() => route.name === "blog-index" || route.name === "blog-post");
 
@@ -16,13 +17,36 @@ function onScroll() {
   isScrolled.value = window.scrollY > 24;
 }
 
+function toggleMobile() {
+  mobileOpen.value = !mobileOpen.value;
+}
+function closeMobile() {
+  mobileOpen.value = false;
+}
+function onKey(e) {
+  if (e.key === "Escape") closeMobile();
+}
+
+// Close the menu whenever the route changes — covers nav clicks and any
+// programmatic navigation that bypasses our click handlers.
+watch(() => route.fullPath, closeMobile);
+
+// Lock the page scroll while the menu is open so the panel doesn't drag.
+watch(mobileOpen, (open) => {
+  if (typeof document === "undefined") return;
+  document.body.style.overflow = open ? "hidden" : "";
+});
+
 onMounted(() => {
   window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("keydown", onKey);
   onScroll();
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener("scroll", onScroll);
+  window.removeEventListener("keydown", onKey);
+  document.body.style.overflow = "";
 });
 </script>
 
@@ -70,8 +94,52 @@ onBeforeUnmount(() => {
             <path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </button>
+
+        <button
+          type="button"
+          class="hamburger"
+          :class="{ 'hamburger--open': mobileOpen }"
+          :aria-label="mobileOpen ? 'Close menu' : 'Open menu'"
+          :aria-expanded="mobileOpen"
+          @click="toggleMobile"
+        >
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
+
+    <!-- Mobile slide-down menu (shown ≤880px via CSS, button does the show/hide). -->
+    <Transition name="mobile-menu">
+      <nav
+        v-if="mobileOpen"
+        class="preview-header__mobile"
+        aria-label="Mobile navigation"
+        @click.self="closeMobile"
+      >
+        <ul>
+          <li>
+            <router-link :to="{ path: '/', hash: '#platform' }" @click="closeMobile">
+              Platform
+            </router-link>
+          </li>
+          <li>
+            <router-link :to="{ path: '/', hash: '#workflow' }" @click="closeMobile">
+              Workflow
+            </router-link>
+          </li>
+          <li>
+            <router-link :to="{ path: '/', hash: '#industries' }" @click="closeMobile">
+              Industries
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/blog" @click="closeMobile" :class="{ 'is-active': isBlog }">
+              Blog
+            </router-link>
+          </li>
+        </ul>
+      </nav>
+    </Transition>
   </header>
 </template>
 
@@ -231,12 +299,93 @@ onBeforeUnmount(() => {
   transform: translateX(3px);
 }
 
+/* Hamburger — hidden on desktop, shown below 880px in the actions group. */
+.hamburger {
+  display: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+}
+.hamburger span {
+  display: block;
+  position: absolute;
+  left: 7px;
+  right: 7px;
+  height: 2px;
+  background: var(--text-primary);
+  border-radius: 99px;
+  transform-origin: center;
+  transition: transform 260ms var(--ease-out-quint), opacity 200ms ease, top 260ms var(--ease-out-quint);
+}
+.hamburger span:nth-child(1) { top: 9px; }
+.hamburger span:nth-child(2) { top: 14px; }
+.hamburger span:nth-child(3) { top: 19px; }
+/* X state when open. */
+.hamburger--open span:nth-child(1) { top: 14px; transform: rotate(45deg); }
+.hamburger--open span:nth-child(2) { opacity: 0; }
+.hamburger--open span:nth-child(3) { top: 14px; transform: rotate(-45deg); }
+
+/* Slide-down panel below the sticky header. */
+.preview-header__mobile {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: color-mix(in srgb, var(--bg-canvas) 92%, transparent);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: 0 18px 30px -10px color-mix(in srgb, var(--brand) 12%, transparent);
+}
+.preview-header__mobile ul {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 1rem 1rem;
+  display: grid;
+  gap: 0.15rem;
+}
+.preview-header__mobile li a {
+  display: block;
+  padding: 0.85rem 0.85rem;
+  color: var(--text-primary);
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  border-radius: 10px;
+  transition: background 180ms ease, color 180ms ease;
+}
+.preview-header__mobile li a:hover {
+  background: var(--bg-elevated);
+  color: var(--brand);
+}
+.preview-header__mobile li a.is-active {
+  background: color-mix(in srgb, var(--brand) 10%, transparent);
+  color: var(--brand);
+}
+
+/* Transition for the slide-down panel. */
+.mobile-menu-enter-active,
+.mobile-menu-leave-active {
+  transition: transform 280ms var(--ease-out-quint), opacity 240ms ease;
+}
+.mobile-menu-enter-from,
+.mobile-menu-leave-to {
+  transform: translateY(-12px);
+  opacity: 0;
+}
+
 @media (max-width: 880px) {
   .preview-header__nav { display: none; }
   .preview-header__inner { grid-template-columns: auto 1fr; }
   /* Hold actions to their content width and pin them to the right edge
      so the button doesn't sit in the middle of a stretched 1fr track. */
   .preview-header__actions { justify-self: end; gap: 0.6rem; }
+  .hamburger { display: inline-block; }
 }
 
 @media (max-width: 480px) {
