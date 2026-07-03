@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 const LandingV1 = () => import("../pages/LandingV1.vue");
 const BlogIndex = () => import("../pages/BlogIndex.vue");
 const BlogPost = () => import("../pages/BlogPost.vue");
+const SarCampaign = () => import("../pages/SarCampaign.vue");
 const NotFoundPage = () => import("../components/NotFoundPage.vue");
 
 export const router = createRouter({
@@ -11,6 +12,7 @@ export const router = createRouter({
     { path: "/", name: "home", component: LandingV1 },
     { path: "/blog", name: "blog-index", component: BlogIndex },
     { path: "/blog/:slug", name: "blog-post", component: BlogPost, props: true },
+    { path: "/sar", name: "sar-campaign", component: SarCampaign },
     { path: "/:pathMatch(.*)*", name: "not-found", component: NotFoundPage }
   ],
   scrollBehavior(to, from, savedPosition) {
