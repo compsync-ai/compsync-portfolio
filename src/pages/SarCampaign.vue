@@ -249,12 +249,16 @@ function initCalEmbed() {
     hideEventTypeDetails: false,
     ...(isMobile ? {} : { layout: "month_view" })
   });
-  // Conversion signal for Google Ads / GA4 when a booking completes.
+  // Conversion signals (GA4 + LinkedIn) when a booking completes.
   window.Cal("on", {
     action: "bookingSuccessful",
     callback: () => {
       if (typeof window.gtag === "function") {
         window.gtag("event", "generate_lead", { form_id: "sar_assessment_cal" });
+      }
+      const cfg = window.__ANALYTICS__;
+      if (typeof window.lintrk === "function" && cfg && cfg.liConversionId) {
+        window.lintrk("track", { conversion_id: cfg.liConversionId });
       }
     }
   });

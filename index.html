@@ -13,6 +13,41 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Montserrat:wght@400;500;600;700;800&display=swap"
     />
     <title>CompSync · Compliance Infrastructure for Modern Finance</title>
+    <script>
+      // Analytics config. Fill the IDs to activate; empty strings no-op.
+      window.__ANALYTICS__ = {
+        gaId: "",            // GA4 Measurement ID, e.g. "G-XXXXXXXXXX"
+        liPartnerId: "",     // LinkedIn Insight Tag partner ID (numeric string)
+        liConversionId: ""   // LinkedIn conversion ID for "SAR assessment booked"
+      };
+      (function () {
+        var cfg = window.__ANALYTICS__;
+        if (cfg.gaId) {
+          var g = document.createElement("script");
+          g.async = true;
+          g.src = "https://www.googletagmanager.com/gtag/js?id=" + cfg.gaId;
+          document.head.appendChild(g);
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function () { window.dataLayer.push(arguments); };
+          window.gtag("js", new Date());
+          window.gtag("config", cfg.gaId);
+        }
+        if (cfg.liPartnerId) {
+          window._linkedin_partner_id = cfg.liPartnerId;
+          window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+          window._linkedin_data_partner_ids.push(cfg.liPartnerId);
+          if (!window.lintrk) {
+            window.lintrk = function (a, b) { window.lintrk.q.push([a, b]); };
+            window.lintrk.q = [];
+          }
+          var l = document.createElement("script");
+          l.type = "text/javascript";
+          l.async = true;
+          l.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+          document.head.appendChild(l);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>

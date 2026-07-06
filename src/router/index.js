@@ -24,6 +24,17 @@ export const router = createRouter({
   }
 });
 
+// SPA page views for GA4: the tag only fires on the initial load, so report
+// in-app route changes manually. No-ops until the GA ID is configured.
+router.afterEach((to) => {
+  if (typeof window !== "undefined" && typeof window.gtag === "function") {
+    window.gtag("event", "page_view", {
+      page_path: to.fullPath,
+      page_title: document.title
+    });
+  }
+});
+
 export const sectionRoutes = ["platform", "monitoring", "intelligence", "contact"];
 
 export function jumpToSection(hash) {
